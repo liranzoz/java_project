@@ -8,6 +8,10 @@ public class Committee {
     private int numOfLecturers;
     private Lecturer head;
 
+    public Committee(String name, Lecturer head) {
+        setName(name);
+        setHead(head);
+    }
 
     public boolean removeLecturerByName(String name) {
         for (int i = 0; i < numOfLecturers; i++) {
@@ -30,11 +34,6 @@ public class Committee {
         this.numOfLecturers = numOfLecturers;
     }
 
-
-    public Committee(String name, Lecturer head) {
-        setName(name);
-        setHead(head);
-    }
 
     public String getName() {
         return name;

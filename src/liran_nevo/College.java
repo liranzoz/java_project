@@ -1,5 +1,6 @@
 package liran_nevo;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -20,11 +21,15 @@ public class College {
             "update head of committee",
             "remove lecturer from committee",
             "add department",
+            "add lecturer to department",
             "show average salary - all lecturers",
             "show average salary by department",
             "show all lecturers data",
             "show all committees data"
     };
+    public College(String collegeName) {
+        setCollegeName(collegeName);
+    }
 
     public void run() {
         int userChoice;
@@ -45,12 +50,25 @@ public class College {
                 case 4 -> updateHeadOfCommittee();
                 case 5 -> removeLecturerFromCommittee();
                 case 6 -> addStudyDepartment();
-                case 7 -> showAverageSalaryAllLecturers();
-                case 8 -> showAverageSalaryByDep();
-                case 9 -> showAllLecturers();
-                case 10 -> showAllCommittee();
+                case 7 -> addLecturerToDep();
+                case 8 -> showAverageSalaryAllLecturers();
+                case 9 -> showAverageSalaryByDep();
+                case 10 -> showAllLecturers();
+                case 11 -> showAllCommittee();
             }
         } while (userChoice != 0);
+    }
+
+    private void addLecturerToDep() {
+        s.nextLine();
+        String choice;
+            do {
+                System.out.println("What department? ");
+                choice = s.nextLine();
+            } while(!Util.isExist(choice,departments,numOfDepartments));
+            lecturers[numOfLecturers-1].setDepartment(Util.getDepartmentFromName(choice,departments));
+            Util.getDepartmentFromName(choice,departments).addLecturerToDep(lecturers[numOfLecturers-1]);
+
     }
 
     private void showAllCommittee() {
@@ -172,10 +190,12 @@ public class College {
         s.nextLine();
         String lecturerName, committeeName;
         System.out.println("enter lecturer name: ");
+        System.out.println(Arrays.toString(lecturers));
         lecturerName = s.nextLine();
         while (true) {
             if (!(Util.isExist(lecturerName, lecturers, numOfLecturers))) {
                 System.out.println("lecturer doesn't exist, enter again: ");
+                System.out.println(Arrays.toString(lecturers));
                 lecturerName = s.nextLine();
             } else {
                 break;
@@ -278,9 +298,6 @@ public class College {
         lecturers[numOfLecturers++] = new Lecturer(name, id, degree, degName, salary);
     }
 
-    public College(String collegeName) {
-        setCollegeName(collegeName);
-    }
 
     public void setCollegeName(String collegeName) {
         this.collegeName = collegeName;
