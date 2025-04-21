@@ -276,19 +276,6 @@ public class College {
             lecturers = (Lecturer[]) Util.copyArr(lecturers, numOfLecturers == 0 ? 1 : numOfLecturers * 2);
         }
         lecturers[numOfLecturers++] = new Lecturer(name, id, degree, degName, salary);
-        s.nextLine();
-        String choice;
-        System.out.println("assign to department? (y/n) ");
-        choice = s.nextLine();
-        if (choice.equals("y")){
-            do {
-                System.out.println("What department? ");
-                choice = s.nextLine();
-            } while(!Util.isExist(choice,departments,numOfDepartments));
-            lecturers[numOfLecturers-1].setDepartment(Util.getDepartmentFromName(choice,departments));
-            Util.getDepartmentFromName(choice,departments).addLecturerToDep(lecturers[numOfLecturers-1]);
-        }
-
     }
 
     public College(String collegeName) {
