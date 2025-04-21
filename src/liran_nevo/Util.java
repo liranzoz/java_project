@@ -73,6 +73,23 @@ public class Util {
         return Arrays.copyOf(arr,size);
     }
 
+    public static void printArraysByName(Lecturer[] arr){
+        for (Lecturer name : arr){
+            System.out.println(name.getName());
+        }
+    }
+    public static void printArraysByName(Department[] arr){
+        for (Department name : arr){
+            System.out.println(name.getName());
+        }
+    }
+    public static void printArraysByName(Committee[] arr){
+        for (Committee name : arr){
+            System.out.println(name.getName());
+        }
+    }
+
+
     public static String str(String[] arr) {
         StringBuilder sb = new StringBuilder();
         sb.append("[");

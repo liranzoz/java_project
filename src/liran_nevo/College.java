@@ -42,6 +42,7 @@ public class College {
             userChoice = s.nextInt();
             switch (userChoice) {
                 case 0 -> {
+                    System.out.println("Thanks, See You...");
                     return;
                 }
                 case 1 -> addLecturer();
@@ -61,12 +62,17 @@ public class College {
 
     private void addLecturerToDep() {
         s.nextLine();
-        String choice;
+        String choice, lecturerChoice;
             do {
                 System.out.println("What department? ");
+                Util.printArraysByName(departments);
                 choice = s.nextLine();
+                System.out.println("What lecturer? ");
+                Util.printArraysByName(lecturers);
+                lecturerChoice = s.nextLine();
+
             } while(!Util.isExist(choice,departments,numOfDepartments));
-            lecturers[numOfLecturers-1].setDepartment(Util.getDepartmentFromName(choice,departments));
+            Util.getLecturerFromName(lecturerChoice,lecturers).setDepartment(Util.getDepartmentFromName(choice,departments));
             Util.getDepartmentFromName(choice,departments).addLecturerToDep(lecturers[numOfLecturers-1]);
 
     }
@@ -117,6 +123,9 @@ public class College {
         do {
             s.nextLine();
             System.out.println("enter department name- ");
+            for (Department dep: departments){
+                System.out.println(dep.getName());
+            }
             userChoice = s.nextLine();
 
             if (Util.isExist(userChoice, departments, numOfDepartments)) {
@@ -139,6 +148,7 @@ public class College {
         boolean flag = false;
         s.nextLine();
         System.out.println("what committee? ");
+
         String committee = s.nextLine();
         while (true) {
             if (!Util.isExist(committee, committees, numOfCommittees)) {
@@ -190,12 +200,12 @@ public class College {
         s.nextLine();
         String lecturerName, committeeName;
         System.out.println("enter lecturer name: ");
-        System.out.println(Arrays.toString(lecturers));
+        Util.printArraysByName(lecturers);
         lecturerName = s.nextLine();
         while (true) {
             if (!(Util.isExist(lecturerName, lecturers, numOfLecturers))) {
                 System.out.println("lecturer doesn't exist, enter again: ");
-                System.out.println(Arrays.toString(lecturers));
+                Util.printArraysByName(lecturers);
                 lecturerName = s.nextLine();
             } else {
                 break;
@@ -203,6 +213,7 @@ public class College {
         }
         do {
             System.out.println("enter committee name: ");
+            Util.printArraysByName(committees);
             committeeName = s.nextLine();
             if (!(Util.isExist(committeeName, committees, numOfCommittees))) {
                 System.out.println("committee doesn't exist");
@@ -226,17 +237,18 @@ public class College {
             }
         }
         System.out.println("enter name of head of committee: ");
+        for (Lecturer name1 : lecturers){
+            System.out.println(name1.getName() + " - " + name1.getDegree());
+        }
         String headName = s.nextLine();
         while (true) {
             if (!Util.isExist(headName, lecturers, numOfLecturers)) {
                 System.out.println("lecturer doesnt exist, try again ");
                 headName = s.nextLine();
             } else {
-                System.out.println("1");
                 if (Util.isDocProf(Util.getLecturerFromName(headName, lecturers))) {
-                    System.out.println("2");
                     if (numOfCommittees == committees.length) {
-                        System.out.println("Adding committee number: " + numOfCommittees);
+                        System.out.println("Adding committee number: " + numOfCommittees + 1);
                         committees = (Committee[]) Util.copyArr(committees, numOfCommittees == 0 ? 1 : numOfCommittees * 2);
                     }
                     committees[numOfCommittees++] = new Committee(name, Util.getLecturerFromName(headName, lecturers));
