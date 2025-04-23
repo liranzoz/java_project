@@ -21,7 +21,7 @@ public class Department {
                 break;
             }
             for (int j = pos; j < lecturers.length; j++) {
-                if(lecturers[j]==null){
+                if(lecturers[j+1]==null){
                     break;
                 }
                 lecturers[j]=lecturers[j+1];

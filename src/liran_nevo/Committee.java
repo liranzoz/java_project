@@ -63,13 +63,16 @@ public class Committee {
         if(numOfLecturers==lecturers.length){
             lecturers= Arrays.copyOf(lecturers,lecturers.length==0?1:lecturers.length*2);
         }
-        lecturers[numOfLecturers]=lecturer;
+        lecturers[numOfLecturers++]=lecturer;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Lecturer l : lecturers){
+            if(l==null){
+                break;
+            }
             sb.append(l.getName()).append(", ");
         }
         return String.format(

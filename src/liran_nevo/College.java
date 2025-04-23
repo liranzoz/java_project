@@ -104,6 +104,10 @@ public class College {
             System.out.println("enter department name: ");
             depName = s.nextLine();
         } while (!Util.isExist(depName, departments, numOfDepartments));
+        if(Util.getDepartmentFromName(depName,departments).getNumOfLecturers()==0){
+            System.out.println("no lecturers in department, average is 0");
+            return;
+        }
         for (Lecturer lecturer : lecturers) {
             if(lecturer.getDepartment()!=null) {
                 if (lecturer.getDepartment().getName().equals(depName)) {
@@ -115,6 +119,9 @@ public class College {
     }
 
     private void showAverageSalaryAllLecturers() {
+        if(numOfLecturers==0){
+            System.out.println("no lecturers, average is 0");
+        }
         int averageSum = 0;
         for (Lecturer lecturer : lecturers) {
             averageSum += lecturer.getSalary();
@@ -234,6 +241,10 @@ public class College {
     }
 
     private void addCommittee() {
+        if(Util.getNumOfDocProf(lecturers)<1){
+            System.out.println("not able to create a committee, doctor/professor exists");
+            return;
+        }
         s.nextLine();
         System.out.println("enter committee name: ");
         String name = s.nextLine();
