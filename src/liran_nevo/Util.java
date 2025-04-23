@@ -37,8 +37,7 @@ public class Util {
     }
 
     public static boolean isDocProf(Lecturer lecturer) {
-        String deg = lecturer.getDegree();
-        return deg.equals("doctor") || deg.equals("professor");
+        return lecturer.getDegree().equals(Lecturer.eDegreeType.DOCTOR )|| lecturer.getDegree().equals(Lecturer.eDegreeType.PROFESSOR);
     }
 
     public static Committee getCommitteeFromName(String name,Committee[]committees){
@@ -74,18 +73,33 @@ public class Util {
     }
 
     public static void printArraysByName(Lecturer[] arr){
+        System.out.println("existing lecturers:");
+        int i=1;
         for (Lecturer name : arr){
-            System.out.println(name.getName());
+            if(name!=null) {
+                System.out.println(i + ") " + name.getName());
+                i++;
+            }
         }
     }
     public static void printArraysByName(Department[] arr){
+        System.out.println("existing departments:");
+        int i=1;
         for (Department name : arr){
-            System.out.println(name.getName());
+            if (name!=null) {
+                System.out.println(i + ") " + name.getName());
+                i++;
+            }
         }
     }
     public static void printArraysByName(Committee[] arr){
+        System.out.println("existing committees:");
+        int i=1;
         for (Committee name : arr){
-            System.out.println(name.getName());
+            if(name!=null) {
+                System.out.println(i + ") " + name.getName());
+                i++;
+            }
         }
     }
 

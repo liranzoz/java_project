@@ -61,6 +61,10 @@ public class College {
     }
 
     private void addLecturerToDep() {
+        if(departments.length==0){
+            System.out.println("no departments yet, cannot add lecturer");
+            return;
+        }
         s.nextLine();
         String choice, lecturerChoice;
             do {
@@ -68,6 +72,7 @@ public class College {
                 Util.printArraysByName(departments);
                 choice = s.nextLine();
                 System.out.println("What lecturer? ");
+                System.out.println("enter the name");
                 Util.printArraysByName(lecturers);
                 lecturerChoice = s.nextLine();
 
@@ -197,6 +202,10 @@ public class College {
     }
 
     private void addLecturerToCommittee() {
+        if(committees.length==0){
+            System.out.println("no committees yet, cannot add lecturer");
+            return;
+        }
         s.nextLine();
         String lecturerName, committeeName;
         System.out.println("enter lecturer name: ");
@@ -219,6 +228,7 @@ public class College {
                 System.out.println("committee doesn't exist");
             } else {
                 Util.getCommitteeFromName(committeeName,committees).addLecturerTocommittee(Util.getLecturerFromName(lecturerName,lecturers));
+                Util.getLecturerFromName(lecturerName,lecturers).addCommittee(Util.getCommitteeFromName(committeeName,committees));
             }
         }while(!Util.isExist(committeeName,committees,numOfCommittees));
     }
@@ -238,7 +248,9 @@ public class College {
         }
         System.out.println("enter name of head of committee: ");
         for (Lecturer name1 : lecturers){
-            System.out.println(name1.getName() + " - " + name1.getDegree());
+            if(name1!=null) {
+                System.out.println(name1.getName() + " - " + name1.getDegree());
+            }
         }
         String headName = s.nextLine();
         while (true) {
@@ -297,8 +309,9 @@ public class College {
         }
         System.out.println("enter id");
         String id = s.nextLine();
-        System.out.println("enter degree (1st/2nd/doctor/professor: ");
-        String degree = s.nextLine();
+        System.out.println("enter degree: \n1- BSc\n2- MSc\n3- doctor\n4- professor");
+        int degree = s.nextInt();
+        s.nextLine();
         System.out.println("enter degree name: ");
         String degName = s.nextLine();
         System.out.println("enter salary: ");

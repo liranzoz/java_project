@@ -4,13 +4,14 @@ import java.util.Arrays;
 
 public class Committee {
     private String name;
-    private Lecturer[] lecturers = new Lecturer[0];
-    private int numOfLecturers;
+    private Lecturer[] lecturers = new Lecturer[1];
+    private int numOfLecturers = 1;
     private Lecturer head;
 
     public Committee(String name, Lecturer head) {
         setName(name);
         setHead(head);
+        this.lecturers[0]=head;
     }
 
     public boolean removeLecturerByName(String name) {
@@ -71,10 +72,9 @@ public class Committee {
         for (Lecturer l : lecturers){
             sb.append(l.getName()).append(", ");
         }
-        return "Committee{" +
-                "name='" + name + '\'' +
-                ", head=" + head.getName() +
-                ",lecturers: "+sb+'}';
+        return String.format(
+                "Committee{name='%s', head=%s, lecturers=%s}",
+                name, head.getName(), sb);
     }
 
 }

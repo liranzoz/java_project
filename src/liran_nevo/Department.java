@@ -13,11 +13,32 @@ public class Department {
         this.numOfStudents = numOfStudents;
     }
 
+    public void removeLecturerFromDep(Lecturer lecturer) {
+        int pos=0;
+        for (int i = 0; i < lecturers.length; i++) {
+            if(lecturers[i].equals(lecturer)){
+                pos=i;
+                break;
+            }
+            for (int j = pos; j < lecturers.length; j++) {
+                if(lecturers[j]==null){
+                    break;
+                }
+                lecturers[j]=lecturers[j+1];
+            }
+        }
+    }
+
     public void addLecturerToDep(Lecturer lecturer){
+        if(Util.isExist(lecturer.getName(),this.lecturers,this.numOfLecturers)){
+            System.out.println("lecturer already in department");
+            return;
+        }
         if(numOfLecturers==lecturers.length) {
             this.lecturers = Arrays.copyOf(lecturers, lecturers.length==0?1:lecturers.length*2);
         }
-        lecturers[numOfLecturers] = lecturer;
+        lecturers[numOfLecturers++] = lecturer;
+        lecturer.setDepartment(this);
     }
 
     public String getName() {
@@ -54,11 +75,11 @@ public class Department {
 
     @Override
     public String toString() {
-        return "Department{" +
-                "name='" + name + '\'' +
-                ", numOfStudents=" + numOfStudents +
-                ", lecturers=" + Arrays.toString(lecturers) +
-                ", numOfLecturers=" + numOfLecturers +
-                '}';
+        return String.format(
+                "Department{name='%s', numOfStudents=%d, lecturers=%s, numOfLecturers=%d}",
+                name, numOfStudents, Arrays.toString(lecturers), numOfLecturers
+        );
     }
+
+
 }
