@@ -1,7 +1,19 @@
 package liran_nevo;
 import java.util.Arrays;
 
+
 public class Util {
+    public static int getNumOfDocProf(Lecturer[] lecturers){
+        int counter =0;
+        for (Lecturer l : lecturers){
+            if(l.getDegree().equals(Lecturer.eDegreeType.DOCTOR)||l.getDegree().equals(Lecturer.eDegreeType.PROFESSOR)){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+
     public static String rjust(String st, int minWidth, char fillChar) {
         if (st.length() >= minWidth) {
             return st;
