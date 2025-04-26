@@ -14,7 +14,7 @@ public class Lecturer {
     private Committee[] committees;
     private int numOfCommittees;
 
-    public Lecturer(String name, String id, int degree, String degName, int salary) {
+    public Lecturer(String name, String id, eDegreeType degree, String degName, int salary) {
         setName(name);
         setId(id);
         setDegree(degree);
@@ -47,15 +47,8 @@ public class Lecturer {
         return degree;
     }
 
-    public void setDegree(int deg) {
-        // 1- B.S.c 2-MSc 3-doctor 4- professor
-        switch (deg) {
-            case 1 -> this.degree = eDegreeType.BSc;
-            case 2 -> this.degree = eDegreeType.MSc;
-            case 3 -> this.degree = eDegreeType.DOCTOR;
-            case 4 -> this.degree = eDegreeType.PROFESSOR;
-            default -> this.degree = eDegreeType.BSc; //default for invalid is first degree
-        }
+    public void setDegree(eDegreeType deg) {
+        this.degree = deg;
     }
 
     public String getDegreeName() {
@@ -99,10 +92,16 @@ public class Lecturer {
 
     @Override
     public String toString() {
-        return String.format(
-                "Lecturer{name='%s', degree='%s', degreeName='%s', id='%s', salary=%d, department=%s}",
-                name, degree, degreeName, id, salary, department
-        );
+        StringBuilder sb = new StringBuilder("lecturer: "+name+" | id: "+id+" | degree: "+degree+" | degree name: "+degreeName+"\ncommittees:\n") ;
+        for (Committee c : committees){
+            if(c!=null){
+                sb.append(c.getName());
+            }
+        }
+        if(department!=null) {
+            sb.append("department: " + department.getName());
+        }
+        return sb.toString();
     }
 
 }

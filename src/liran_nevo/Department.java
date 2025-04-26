@@ -30,10 +30,6 @@ public class Department {
     }
 
     public void addLecturerToDep(Lecturer lecturer){
-        if(Util.isExist(lecturer.getName(),this.lecturers,this.numOfLecturers)){
-            System.out.println("lecturer already in department");
-            return;
-        }
         if(numOfLecturers==lecturers.length) {
             this.lecturers = Arrays.copyOf(lecturers, lecturers.length==0?1:lecturers.length*2);
         }
@@ -75,10 +71,13 @@ public class Department {
 
     @Override
     public String toString() {
-        return String.format(
-                "Department{name='%s', numOfStudents=%d, lecturers=%s, numOfLecturers=%d}",
-                name, numOfStudents, Arrays.toString(lecturers), numOfLecturers
-        );
+        StringBuilder sb = new StringBuilder("department: "+name+" | number of students: "+numOfStudents+"\nlecturers:\n");
+        for (Lecturer lecturer:lecturers){
+            if(lecturer!=null){
+                sb.append(lecturer.getName());
+            }
+        }
+        return sb.toString();
     }
 
 

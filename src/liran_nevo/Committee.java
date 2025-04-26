@@ -4,14 +4,13 @@ import java.util.Arrays;
 
 public class Committee {
     private String name;
-    private Lecturer[] lecturers = new Lecturer[1];
-    private int numOfLecturers = 1;
+    private Lecturer[] lecturers = new Lecturer[0];
+    private int numOfLecturers = 0;
     private Lecturer head;
 
     public Committee(String name, Lecturer head) {
         setName(name);
         setHead(head);
-        this.lecturers[0]=head;
     }
 
     public boolean removeLecturerByName(String name) {
@@ -59,6 +58,7 @@ public class Committee {
     public void setHead(Lecturer head) {
             this.head = head;
     }
+
     public void addLecturerTocommittee(Lecturer lecturer) {
         if(numOfLecturers==lecturers.length){
             lecturers= Arrays.copyOf(lecturers,lecturers.length==0?1:lecturers.length*2);
@@ -68,16 +68,14 @@ public class Committee {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("committee: "+name+" | head of committee: "+head.getName()+"\nlecturers:\n");
         for (Lecturer l : lecturers){
             if(l==null){
                 break;
             }
             sb.append(l.getName()).append(", ");
         }
-        return String.format(
-                "Committee{name='%s', head=%s, lecturers=%s}",
-                name, head.getName(), sb);
+        return sb.toString();
     }
 
 }
