@@ -208,6 +208,7 @@ public class liran_nevo {
         String name = s.nextLine();
         College c = new College(name);
         run(c);
+        s.close();
     }
 }
 //Pini The King !
