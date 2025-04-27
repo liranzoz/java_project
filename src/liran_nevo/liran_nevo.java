@@ -31,7 +31,6 @@ public class liran_nevo {
             switch (userChoice) {
                 case 0 -> {
                     System.out.println("Thanks, See You...");
-                    return;
                 }
                 case 1 -> getLecturerDetails(college);
                 case 2 -> getCommitteeDetails(college);
