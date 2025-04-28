@@ -14,7 +14,7 @@ public class Util {
     }
 
 
-    public static String rjust(String st, int minWidth, char fillChar) {
+    public static String rJust(String st, int minWidth, char fillChar) {
         if (st.length() >= minWidth) {
             return st;
         }
@@ -49,6 +49,9 @@ public class Util {
     }
 
     public static boolean isDocProf(Lecturer lecturer) {
+        if (lecturer == null){
+            return false;
+        }
         return lecturer.getDegree().equals(Lecturer.eDegreeType.DOCTOR) || lecturer.getDegree().equals(Lecturer.eDegreeType.PROFESSOR);
     }
 

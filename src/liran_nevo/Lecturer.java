@@ -64,7 +64,7 @@ public class Lecturer {
     }
 
     public void setId(String id) {
-        this.id = Util.rjust(id, 9, '0');
+        this.id = Util.rJust(id, 9, '0');
     }
 
     public int getSalary() {

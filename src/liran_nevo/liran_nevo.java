@@ -112,8 +112,10 @@ public class liran_nevo {
     private static void getHeadDetails(College college) {
         s.nextLine();
         System.out.println("What Committee: ");
+        Util.printArraysByName(college.getCommittees());
         String committeeName = s.nextLine();
         System.out.println("enter new head of committee: ");
+        Util.printArraysByName(college.getLecturers());
         String newHead = s.nextLine();
         eStatus stat = college.updateHeadOfCommittee(committeeName,newHead);
         switch (stat){
