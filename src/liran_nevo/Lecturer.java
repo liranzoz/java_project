@@ -23,16 +23,16 @@ public class Lecturer {
         this.committees = new Committee[0];
     }
 
-    public void addCommittee(Committee committee) {
+    public eStatus addCommittee(Committee committee) {
         if (this.committees.length == this.numOfCommittees) {
             this.committees = Arrays.copyOf(committees, committees.length == 0 ? 1 : committees.length * 2);
         }
         if (!Util.isExist(committee.getName(), committees, numOfCommittees)) {
             this.committees[numOfCommittees++] = committee;
         } else {
-            System.out.println("lecturer already in the committee, not added");
+            return eStatus.LECTURER_EXISTS;
         }
-
+        return eStatus.SUCCESS;
     }
 
     public String getName() {
@@ -92,6 +92,7 @@ public class Lecturer {
 
     @Override
     public String toString() {
+        System.out.println();
         StringBuilder sb = new StringBuilder("lecturer: "+name+" | id: "+id+" | degree: "+degree+" | degree name: "+degreeName+"\ncommittees: ") ;
         if (numOfCommittees == 0){
             sb.append("no committees");
@@ -107,7 +108,6 @@ public class Lecturer {
         }else {
             sb.append("\ndepartments: no departments");
         }
-        sb.append("\n ----------------------------");
         return sb.toString();
     }
 

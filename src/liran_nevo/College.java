@@ -70,7 +70,6 @@ public class College {
 
 
     public eStatus removeLecturerFromCommittee(String lecturerName, String committeName) {
-        boolean flag = false;
         if(!Util.isExist(committeName,committees,numOfCommittees)){
             return eStatus.COMMITTEE_DONT_EXIST;
         }

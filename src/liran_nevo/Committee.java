@@ -23,7 +23,7 @@ public class Committee {
                 return true;
             }
         }
-        return false; // לא נמצא
+        return false;
     }
 
     public int getNumOfLecturers() {
@@ -57,6 +57,7 @@ public class Committee {
 
     public void setHead(Lecturer head) {
             this.head = head;
+            head.addCommittee(this);
     }
 
     public void addLecturerToCommittee(Lecturer lecturer) {
@@ -68,20 +69,19 @@ public class Committee {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("committee: "+name+" | head of committee: "+head.getName()+"\nlecturers: ");
-        for (int i = 0; i < numOfLecturers; i++) {
-            if (lecturers[i] == null) {
-                sb.append("no lecturers");
-                break;
+        System.out.println();
+        StringBuilder sb = new StringBuilder("committee: " + name + " | head of committee: " + head.getName() + "\nlecturers: ");
+        if (numOfLecturers == 0) {
+            sb.append("no lecturers\n");
+            for (int i = 0; i < numOfLecturers; i++) {
+                if (lecturers.length != numOfLecturers) {
+                    sb.append(lecturers[i].getName()).append(", ");
+                } else {
+                    sb.append(lecturers[i].getName());
+                }
             }
-            if (lecturers.length != numOfLecturers){
-                sb.append(lecturers[i].getName()).append(", ");
-        }else {
-                sb.append(lecturers[i].getName());
-            }
-
         }
+        sb.append("\n");
         return sb.toString();
     }
-
 }

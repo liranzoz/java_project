@@ -152,6 +152,7 @@ public class liran_nevo {
         committeeName = s.nextLine();
         eStatus stat = college.addLecturerToCommittee(Util.getLecturerFromName(lecturerName, college.getLecturers()), Util.getCommitteeFromName(committeeName, college.getCommittees()));
         switch (stat){
+            case LECTURER_EXISTS -> System.out.println(eStatus.LECTURER_EXISTS);
             case COMMITTEE_DONT_EXIST -> System.out.println(eStatus.COMMITTEE_DONT_EXIST);
             case SUCCESS -> System.out.println(eStatus.SUCCESS);
         }

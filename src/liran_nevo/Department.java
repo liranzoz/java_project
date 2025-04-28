@@ -71,18 +71,19 @@ public class Department {
 
     @Override
     public String toString() {
+        System.out.println();
         StringBuilder sb = new StringBuilder("department: " + name + " | number of students: " + numOfStudents + "\nlecturers:\n");
-        for (int i = 0; i < numOfLecturers; i++) {
-            if (lecturers[i] == null) {
-                sb.append("no lecturers");
-                break;
-            }
-            if (lecturers.length != numOfLecturers) {
-                sb.append(lecturers[i].getName()).append(", ");
-            } else {
-                sb.append(lecturers[i].getName());
+        if (numOfLecturers == 0) {
+            sb.append("no lecturers\n");
+            for (int i = 0; i < numOfLecturers; i++) {
+                if (lecturers.length != numOfLecturers) {
+                    sb.append(lecturers[i].getName()).append(", ");
+                } else {
+                    sb.append(lecturers[i].getName());
+                }
             }
         }
+        sb.append("\n");
         return sb.toString();
     }
 }
