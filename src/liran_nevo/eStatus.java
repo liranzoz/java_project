@@ -1,7 +1,7 @@
 package liran_nevo;
 
 public enum eStatus {
-    SUCCESS("Success"),
+    SUCCESS("Added"),
     LECTURER_EXISTS("Lecturer Exists"),
     LECTURER_DONT_EXIST("Lecturer Dont Exist"),
    DEPARTMENT_EXIST("Department Exist"),

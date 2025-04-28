@@ -85,7 +85,7 @@ public class Util {
     }
 
     public static void printArraysByName(Lecturer[] arr) {
-        System.out.println("existing lecturers:");
+        System.out.println("existing lecturers (enter name):");
         int i = 1;
         for (Lecturer name : arr) {
             if (name != null) {
@@ -96,7 +96,7 @@ public class Util {
     }
 
     public static void printArraysByName(Department[] arr) {
-        System.out.println("existing departments:");
+        System.out.println("existing departments (enter name):");
         int i = 1;
         for (Department name : arr) {
             if (name != null) {
@@ -107,7 +107,7 @@ public class Util {
     }
 
     public static void printArraysByName(Committee[] arr) {
-        System.out.println("existing committees:");
+        System.out.println("existing committees (enter name):");
         int i = 1;
         for (Committee name : arr) {
             if (name != null) {
@@ -147,19 +147,19 @@ public class Util {
         return averageSum / dep.getNumOfLecturers();
     }
 
-
-    public static String str(String[] arr) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(arr[i]);
-            if (i < arr.length - 1) {
-                sb.append(", ");
-            }
-        }
-        sb.append("]");
-        return sb.toString();
-    }
+// FOR FUTURE USE
+//    public static String str(String[] arr) {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("[");
+//        for (int i = 0; i < arr.length; i++) {
+//            sb.append(arr[i]);
+//            if (i < arr.length - 1) {
+//                sb.append(", ");
+//            }
+//        }
+//        sb.append("]");
+//        return sb.toString();
+//    }
 }
 
 

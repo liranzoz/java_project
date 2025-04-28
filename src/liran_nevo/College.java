@@ -109,7 +109,7 @@ public class College {
        if (Util.isExist(lecturer.getName(),committee.getLecturers(),committee.getNumOfLecturers())){
            return eStatus.GENERAL_ERROR;
        }
-        committee.addLecturerTocommittee(lecturer);
+        committee.addLecturerToCommittee(lecturer);
         lecturer.addCommittee(committee);
         return eStatus.SUCCESS;
     }
@@ -169,7 +169,7 @@ public class College {
         this.committees = committees;
     }
 
-    public int getnumOfLecturers() {
+    public int getNumOfLecturers() {
         return numOfLecturers;
     }
 

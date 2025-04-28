@@ -14,24 +14,24 @@ public class Department {
     }
 
     public void removeLecturerFromDep(Lecturer lecturer) {
-        int pos=0;
+        int pos = 0;
         for (int i = 0; i < lecturers.length; i++) {
-            if(lecturers[i].equals(lecturer)){
-                pos=i;
+            if (lecturers[i].equals(lecturer)) {
+                pos = i;
                 break;
             }
             for (int j = pos; j < lecturers.length; j++) {
-                if(lecturers[j+1]==null){
+                if (lecturers[j + 1] == null) {
                     break;
                 }
-                lecturers[j]=lecturers[j+1];
+                lecturers[j] = lecturers[j + 1];
             }
         }
     }
 
-    public void addLecturerToDep(Lecturer lecturer){
-        if(numOfLecturers==lecturers.length) {
-            this.lecturers = Arrays.copyOf(lecturers, lecturers.length==0?1:lecturers.length*2);
+    public void addLecturerToDep(Lecturer lecturer) {
+        if (numOfLecturers == lecturers.length) {
+            this.lecturers = Arrays.copyOf(lecturers, lecturers.length == 0 ? 1 : lecturers.length * 2);
         }
         lecturers[numOfLecturers++] = lecturer;
         lecturer.setDepartment(this);
@@ -71,14 +71,18 @@ public class Department {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("department: "+name+" | number of students: "+numOfStudents+"\nlecturers:\n");
-        for (Lecturer lecturer:lecturers){
-            if(lecturer!=null){
-                sb.append(lecturer.getName());
+        StringBuilder sb = new StringBuilder("department: " + name + " | number of students: " + numOfStudents + "\nlecturers:\n");
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturers[i] == null) {
+                sb.append("no lecturers");
+                break;
+            }
+            if (lecturers.length != numOfLecturers) {
+                sb.append(lecturers[i].getName()).append(", ");
+            } else {
+                sb.append(lecturers[i].getName());
             }
         }
         return sb.toString();
     }
-
-
 }

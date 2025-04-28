@@ -59,7 +59,7 @@ public class Committee {
             this.head = head;
     }
 
-    public void addLecturerTocommittee(Lecturer lecturer) {
+    public void addLecturerToCommittee(Lecturer lecturer) {
         if(numOfLecturers==lecturers.length){
             lecturers= Arrays.copyOf(lecturers,lecturers.length==0?1:lecturers.length*2);
         }
@@ -68,12 +68,18 @@ public class Committee {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("committee: "+name+" | head of committee: "+head.getName()+"\nlecturers:\n");
-        for (Lecturer l : lecturers){
-            if(l==null){
+        StringBuilder sb = new StringBuilder("committee: "+name+" | head of committee: "+head.getName()+"\nlecturers: ");
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturers[i] == null) {
+                sb.append("no lecturers");
                 break;
             }
-            sb.append(l.getName()).append(", ");
+            if (lecturers.length != numOfLecturers){
+                sb.append(lecturers[i].getName()).append(", ");
+        }else {
+                sb.append(lecturers[i].getName());
+            }
+
         }
         return sb.toString();
     }

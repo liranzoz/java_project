@@ -92,15 +92,22 @@ public class Lecturer {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("lecturer: "+name+" | id: "+id+" | degree: "+degree+" | degree name: "+degreeName+"\ncommittees:\n") ;
-        for (Committee c : committees){
-            if(c!=null){
-                sb.append(c.getName());
+        StringBuilder sb = new StringBuilder("lecturer: "+name+" | id: "+id+" | degree: "+degree+" | degree name: "+degreeName+"\ncommittees: ") ;
+        if (numOfCommittees == 0){
+            sb.append("no committees");
+        }else {
+        for (Committee c : committees) {
+            if (c != null) {
+                sb.append(" ").append(c.getName());
             }
         }
-        if(department!=null) {
-            sb.append("department: " + department.getName());
         }
+        if(department!=null) {
+            sb.append("\ndepartments: ").append(department.getName());
+        }else {
+            sb.append("\ndepartments: no departments");
+        }
+        sb.append("\n ----------------------------");
         return sb.toString();
     }
 
