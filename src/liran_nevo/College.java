@@ -1,7 +1,6 @@
 package liran_nevo;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class College {
@@ -34,28 +33,12 @@ public class College {
         return eStatus.SUCCESS;
     }
 
-    private void showAllCommittee() {
-        for (int i = 0; i < committees.length; i++) {
-            System.out.println(i + ")" + committees[i]);
-        }
-    }
-
-
-    private void showAllLecturers() {
-        for (int i = 0; i < lecturers.length; i++) {
-            System.out.println(i + ")" + lecturers[i]);
-        }
-    }
-
-
     public eStatus showAverageSalaryByDep(String dep) {
         if (!Util.isExist(dep,departments,numOfDepartments)){
             return eStatus.DEPARTMENT_DONT_EXIST;
         }
         return eStatus.SUCCESS;
     }
-
-
 
     public eStatus addStudyDepartment(String name, int num) {
         if(Util.isExist(name,departments,numOfDepartments)){

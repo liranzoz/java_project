@@ -75,14 +75,15 @@ public class Department {
         StringBuilder sb = new StringBuilder("department: " + name + " | number of students: " + numOfStudents + "\nlecturers:\n");
         if (numOfLecturers == 0) {
             sb.append("no lecturers\n");
+            return sb.toString();
+        }
             for (int i = 0; i < numOfLecturers; i++) {
-                if (lecturers.length != numOfLecturers) {
+                if (i + 1 == numOfLecturers) {
                     sb.append(lecturers[i].getName()).append(", ");
                 } else {
                     sb.append(lecturers[i].getName());
                 }
             }
-        }
         sb.append("\n");
         return sb.toString();
     }

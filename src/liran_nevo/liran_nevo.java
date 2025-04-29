@@ -83,8 +83,7 @@ public class liran_nevo {
         System.out.println("What department? ");
         Util.printArraysByName(college.getDepartments());
         String depName = s.nextLine();
-        System.out.println("What lecturer? ");
-        System.out.println("enter the name");
+        System.out.println("What lecturer? (enter name) ");
         Util.printArraysByName(college.getLecturers());
         String lecturerName = s.nextLine();
         eStatus stat = college.addLecturerToDep(depName,lecturerName);

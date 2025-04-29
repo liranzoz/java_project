@@ -73,14 +73,15 @@ public class Committee {
         StringBuilder sb = new StringBuilder("committee: " + name + " | head of committee: " + head.getName() + "\nlecturers: ");
         if (numOfLecturers == 0) {
             sb.append("no lecturers\n");
+            return sb.toString();
+        }
             for (int i = 0; i < numOfLecturers; i++) {
-                if (lecturers.length != numOfLecturers) {
+                if (i + 1 != numOfLecturers) {
                     sb.append(lecturers[i].getName()).append(", ");
                 } else {
                     sb.append(lecturers[i].getName());
                 }
             }
-        }
         sb.append("\n");
         return sb.toString();
     }
