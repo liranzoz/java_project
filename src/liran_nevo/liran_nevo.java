@@ -202,7 +202,7 @@ public class liran_nevo {
         eStatus stat = college.addLecturer(name,id,deg,degName,salary);
         switch (stat){
             case SUCCESS -> System.out.println(eStatus.SUCCESS);
-            case LECTURER_EXISTS -> System.out.println(eStatus.LECTURER_EXISTS);
+            case LECTURER_EXISTS -> System.out.println(eStatus.LECTURER_EXISTS + ", Try again ");
         }
     }
 
