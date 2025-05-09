@@ -3,6 +3,7 @@ package liran_nevo;
 import java.util.Scanner;
 
 public class liran_nevo {
+    //update
     static Scanner s = new Scanner(System.in);
     private static final String[] MENU = {
             "exit menu",
