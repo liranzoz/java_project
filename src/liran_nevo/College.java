@@ -17,109 +17,121 @@ public class College {
         setCollegeName(collegeName);
     }
 
-    public eStatus addLecturerToDep(String depName, String lectName) {
+    public void addLecturerToDep(String depName, String lectName) throws DepartmentDontExistException,LecturerDontExistException,LecturerExistException {
         if(!Util.isExist(depName,departments,numOfDepartments)){
-            return eStatus.DEPARTMENT_DONT_EXIST;
+            throw new DepartmentDontExistException();
         }
         if(!Util.isExist(lectName,lecturers,numOfLecturers)){
-            return eStatus.LECTURER_DONT_EXIST;
+            throw new LecturerDontExistException();
         }
         Department dep = Util.getDepartmentFromName(depName,departments);
         if(Util.isExist(lectName,dep.getLecturers(),dep.getNumOfLecturers())){
-            return eStatus.LECTURER_EXISTS;
+            throw new LecturerExistException();
         }
         dep.addLecturerToDep(Util.getLecturerFromName(lectName,lecturers));
         Util.getLecturerFromName(lectName,lecturers).setDepartment(dep);
-        return eStatus.SUCCESS;
     }
 
-    public eStatus showAverageSalaryByDep(String dep) {
+    public void showAverageSalaryByDep(String dep) throws DepartmentDontExistException {
         if (!Util.isExist(dep,departments,numOfDepartments)){
-            return eStatus.DEPARTMENT_DONT_EXIST;
+            throw new DepartmentDontExistException();
         }
-        return eStatus.SUCCESS;
     }
 
-    public eStatus addStudyDepartment(String name, int num) {
+    public void addStudyDepartment(String name, int num)throws DepartmentExistException {
         if(Util.isExist(name,departments,numOfDepartments)){
-            return eStatus.DEPARTMENT_EXIST;
+            throw new DepartmentExistException();
         }
         if (departments.length==numOfDepartments){
             departments=Arrays.copyOf(departments,numOfDepartments==0?1:numOfDepartments*2);
         }
         departments[numOfDepartments++]=new Department(name,num);
-        return eStatus.SUCCESS;
     }
 
 
-    public eStatus removeLecturerFromCommittee(String lecturerName, String committeName) {
+    public void removeLecturerFromCommittee(String lecturerName, String committeName)throws CommitteeDontExistException,LecturerDontExistException {
         if(!Util.isExist(committeName,committees,numOfCommittees)){
-            return eStatus.COMMITTEE_DONT_EXIST;
+            throw new CommitteeDontExistException();
         }
         Committee c = Util.getCommitteeFromName(committeName,committees);
         if(!Util.isExist(lecturerName,c.getLecturers(),c.getNumOfLecturers())){
-            return eStatus.LECTURER_DONT_EXIST;
+            throw new LecturerDontExistException();
         }
         c.removeLecturerByName(lecturerName);
-        return eStatus.SUCCESS;
     }
 
-    public eStatus updateHeadOfCommittee(String committeeName, String newHead) {
+    public void updateHeadOfCommittee(String committeeName, String newHead) throws HeadNotValidException, LecturerDontExistException, CommitteeDontExistException {
         if (!Util.isExist(committeeName,committees,numOfCommittees)){
-           return eStatus.COMMITTEE_DONT_EXIST;
+           throw new CommitteeDontExistException();
         }
         if (!Util.isExist(newHead,lecturers,numOfLecturers)){
-            return eStatus.LECTURER_DONT_EXIST;
+            throw new LecturerDontExistException();
         }
-        if (!Util.isDocProf(Util.getLecturerFromName(newHead,lecturers))){
-            return eStatus.HEAD_NOT_VALID;
+        if (!(Util.getLecturerFromName(newHead,lecturers) instanceof Doctor doctor)){
+            throw new HeadNotValidException();
         }
         Util.getCommitteeFromName(committeeName,committees).setHead(Util.getLecturerFromName(newHead,lecturers));
-        return eStatus.SUCCESS;
     }
 
-    public eStatus addLecturerToCommittee(Lecturer lecturer, Committee committee) {
+    public void addLecturerToCommittee(Lecturer lecturer, Committee committee) throws LecturerDontExistException,CommitteeDontExistException,LecturerExistException {
         if(committees.length==0){
-            return eStatus.COMMITTEE_DONT_EXIST;
+            throw new CommitteeDontExistException();
         }
        if (!Util.isExist(committee.getName(),committees,numOfCommittees)){
-           return eStatus.COMMITTEE_DONT_EXIST;
+           throw new CommitteeDontExistException();
        }
        if (!Util.isExist(lecturer.getName(),lecturers,numOfLecturers)){
-           return eStatus.LECTURER_DONT_EXIST;
+           throw new LecturerDontExistException();
        }
        if (Util.isExist(lecturer.getName(),committee.getLecturers(),committee.getNumOfLecturers())){
-           return eStatus.GENERAL_ERROR;
+           throw new LecturerExistException();
        }
         committee.addLecturerToCommittee(lecturer);
         lecturer.addCommittee(committee);
-        return eStatus.SUCCESS;
     }
 
-    public eStatus addCommittee(String name, Lecturer head) {
+    public void addCommittee(String name, Lecturer head)throws HeadNotValidException,CommitteExistException {
         if(!Util.isDocProf(head)){
-            return eStatus.HEAD_NOT_VALID;
+            throw new HeadNotValidException();
         }
         if (Util.isExist(name,committees,numOfCommittees)){
-            return eStatus.COMMITTEE_EXIST;
+            throw new CommitteExistException();
         }
 
         if (numOfCommittees == committees.length) {
             committees = (Committee[]) Util.copyArr(committees, numOfCommittees == 0 ? 1 : numOfCommittees * 2);
         }
         committees[numOfCommittees++] = new Committee(name, head);
-            return eStatus.SUCCESS;
     }
 
-    public eStatus addLecturer(String name,String id,Lecturer.eDegreeType degree,String degName,int salary) {
+    public void addLecturer(String name,String id,Lecturer.eDegreeType degree,String degName,int salary)throws LecturerExistException {
         if(Util.isExist(name,lecturers,numOfLecturers)){
-            return eStatus.LECTURER_EXISTS;
+            throw new LecturerExistException();
         }
         if (numOfLecturers == lecturers.length) {
             lecturers = (Lecturer[]) Util.copyArr(lecturers, numOfLecturers == 0 ? 1 : numOfLecturers * 2);
         }
         lecturers[numOfLecturers++] = new Lecturer(name, id, degree, degName, salary);
-        return eStatus.SUCCESS;
+    }
+
+    public void addLecturer(String name,String id,Lecturer.eDegreeType degree,String degName,int salary,String[] articles)throws LecturerExistException {
+        if(Util.isExist(name,lecturers,numOfLecturers)){
+            throw new LecturerExistException();
+        }
+        if (numOfLecturers == lecturers.length) {
+            lecturers = (Lecturer[]) Util.copyArr(lecturers, numOfLecturers == 0 ? 1 : numOfLecturers * 2);
+        }
+        lecturers[numOfLecturers++] = new Doctor(name, id, degree, degName, salary,articles);
+    }
+
+    public void addLecturer(String name,String id,Lecturer.eDegreeType degree,String degName,int salary,String[] articles, String inst)throws LecturerExistException {
+        if(Util.isExist(name,lecturers,numOfLecturers)){
+            throw new LecturerExistException();
+        }
+        if (numOfLecturers == lecturers.length) {
+            lecturers = (Lecturer[]) Util.copyArr(lecturers, numOfLecturers == 0 ? 1 : numOfLecturers * 2);
+        }
+        lecturers[numOfLecturers++] = new Professor(name, id, degree, degName, salary,articles, inst);
     }
 
 

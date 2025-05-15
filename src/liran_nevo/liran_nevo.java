@@ -17,7 +17,11 @@ public class liran_nevo {
             "show average salary - all lecturers",
             "show average salary by department",
             "show all lecturers data",
-            "show all committees data"
+            "show all committees data",
+            "compare Doctor/ professor by article number",
+            "compare department",// 2 קריטריונים
+            "duplicate committee",
+            "remove lecturer from committee"
     };
 
     public static void run(College college) {
@@ -45,6 +49,12 @@ public class liran_nevo {
                 case 9 -> getDepartmentDetails(college, "show");
                 case 10 -> showAllLecturers(college);
                 case 11 -> showAllCommittee(college);
+                case 12 -> System.out.println("12");
+                case 13 -> System.out.println("13");
+                case 14 -> System.out.println("14");
+                case 15 -> System.out.println("15");
+
+                default -> System.out.println("invalid option");
             }
         } while (userChoice != 0);
     }
@@ -66,12 +76,11 @@ public class liran_nevo {
         System.out.println("enter department name: ");
         Util.printArraysByName(college.getDepartments());
         String name = s.nextLine();
-        eStatus status = college.showAverageSalaryByDep(name);
-        switch (status){
-            case DEPARTMENT_DONT_EXIST -> System.out.println(eStatus.DEPARTMENT_DONT_EXIST);
-            case SUCCESS -> System.out.println(Util.getAverage(Util.getDepartmentFromName(name,college.getDepartments())));
+        try {
+            college.showAverageSalaryByDep(name);
+        }catch(DepartmentDontExistException e){
+            System.out.println(e.getMessage());
         }
-
     }
 
     private static void showAverageSalaryAllLecturers(College college) {
@@ -87,12 +96,10 @@ public class liran_nevo {
         System.out.println("What lecturer? (enter name) ");
         Util.printArraysByName(college.getLecturers());
         String lecturerName = s.nextLine();
-        eStatus stat = college.addLecturerToDep(depName,lecturerName);
-        switch (stat){
-            case LECTURER_DONT_EXIST -> System.out.println(eStatus.LECTURER_DONT_EXIST);
-            case LECTURER_EXISTS -> System.out.println(eStatus.LECTURER_EXISTS);
-            case DEPARTMENT_DONT_EXIST -> System.out.println(eStatus.DEPARTMENT_DONT_EXIST);
-            case SUCCESS -> System.out.println(eStatus.SUCCESS);
+        try {
+            college.addLecturerToDep(depName, lecturerName);
+        }catch (LecturerExistException | LecturerDontExistException | DepartmentDontExistException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -102,10 +109,10 @@ public class liran_nevo {
         String name = s.nextLine();
         System.out.println("enter number of students ");
         int num = s.nextInt();
-        eStatus stat = college.addStudyDepartment(name,num);
-        switch (stat){
-            case SUCCESS -> System.out.println(eStatus.SUCCESS);
-            case DEPARTMENT_EXIST -> System.out.println(eStatus.DEPARTMENT_EXIST);
+        try {
+            college.addStudyDepartment(name, num);
+        }catch(DepartmentExistException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -117,13 +124,13 @@ public class liran_nevo {
         System.out.println("enter new head of committee: ");
         Util.printArraysByName(college.getLecturers());
         String newHead = s.nextLine();
-        eStatus stat = college.updateHeadOfCommittee(committeeName,newHead);
-        switch (stat){
-            case HEAD_NOT_VALID -> System.out.println(eStatus.HEAD_NOT_VALID);
-            case COMMITTEE_DONT_EXIST -> System.out.println(eStatus.COMMITTEE_DONT_EXIST);
-            case LECTURER_DONT_EXIST -> System.out.println(eStatus.LECTURER_DONT_EXIST);
-            case SUCCESS -> System.out.println(eStatus.SUCCESS);
+        try {
+            college.updateHeadOfCommittee(committeeName, newHead);
+        }catch (HeadNotValidException | LecturerDontExistException |
+                CommitteeDontExistException e){
+            System.out.println(e.getMessage());
         }
+
     }
 
     private static void getLecturerCommitteeDetails(College college, String remove) {
@@ -135,11 +142,10 @@ public class liran_nevo {
         System.out.println("enter committee name: ");
         Util.printArraysByName(college.getCommittees());
         committeeName = s.nextLine();
-        eStatus stat = college.removeLecturerFromCommittee(lecturerName,committeeName);
-        switch (stat){
-            case COMMITTEE_DONT_EXIST -> System.out.println(eStatus.COMMITTEE_DONT_EXIST);
-            case LECTURER_DONT_EXIST -> System.out.println(eStatus.LECTURER_DONT_EXIST);
-            case SUCCESS -> System.out.println("Removed");
+        try {
+            college.removeLecturerFromCommittee(lecturerName, committeeName);
+        }catch(CommitteeDontExistException | LecturerDontExistException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -152,11 +158,10 @@ public class liran_nevo {
         System.out.println("enter committee name: ");
         Util.printArraysByName(college.getCommittees());
         committeeName = s.nextLine();
-        eStatus stat = college.addLecturerToCommittee(Util.getLecturerFromName(lecturerName, college.getLecturers()), Util.getCommitteeFromName(committeeName, college.getCommittees()));
-        switch (stat){
-            case LECTURER_EXISTS -> System.out.println(eStatus.LECTURER_EXISTS);
-            case COMMITTEE_DONT_EXIST -> System.out.println(eStatus.COMMITTEE_DONT_EXIST);
-            case SUCCESS -> System.out.println(eStatus.SUCCESS);
+        try {
+            college.addLecturerToCommittee(Util.getLecturerFromName(lecturerName, college.getLecturers()), Util.getCommitteeFromName(committeeName, college.getCommittees()));
+        }catch (LecturerExistException | CommitteeDontExistException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -171,11 +176,10 @@ public class liran_nevo {
             }
         }
         String headName = s.nextLine();
-        eStatus stat = college.addCommittee(name,Util.getLecturerFromName(headName,college.getLecturers()));
-        switch (stat){
-            case COMMITTEE_EXIST -> System.out.println(eStatus.COMMITTEE_EXIST);
-            case HEAD_NOT_VALID -> System.out.println(eStatus.HEAD_NOT_VALID);
-            case SUCCESS -> System.out.println(eStatus.SUCCESS);
+        try {
+            college.addCommittee(name, Util.getLecturerFromName(headName, college.getLecturers()));
+        }catch (CommitteExistException | HeadNotValidException e){
+            System.out.println(e.getMessage());
         }
     }
 
@@ -200,11 +204,40 @@ public class liran_nevo {
         String degName = s.nextLine();
         System.out.println("enter salary: ");
         int salary = s.nextInt();
-        eStatus stat = college.addLecturer(name,id,deg,degName,salary);
-        switch (stat){
-            case SUCCESS -> System.out.println(eStatus.SUCCESS);
-            case LECTURER_EXISTS -> System.out.println(eStatus.LECTURER_EXISTS + ", Try again ");
+        try {
+            switch (degree) {
+                case 1, 2 -> college.addLecturer(name, id, deg, degName, salary);
+                case 3 -> {
+                    String[] articles = getArticles();
+                    college.addLecturer(name, id, deg, degName, salary, articles);
+                }
+                case 4 -> {
+                    String[] articles = getArticles();
+                    System.out.println("enter name of institution that awarded the professorship");
+                    String inst = s.nextLine();
+                    college.addLecturer(name, id, deg, degName, salary, articles, inst);
+                }
+            }
+        }catch (LecturerExistException e){
+            System.out.println(e.getMessage());
         }
+//        if (degree == 4){ // if professor - get the name of body
+//            System.out.println("enter name of institution that awarded the professorship");
+//            String inst = s.nextLine();
+//            eStatus stat = college.addLecturer(name,id,deg,degName,salary,inst);
+//        }else {
+//            eStatus stat = college.addLecturer(name, id, deg, degName, salary);
+//        }
+//        switch (stat){
+//            case SUCCESS -> System.out.println(eStatus.SUCCESS);
+//            case LECTURER_EXISTS -> System.out.println(eStatus.LECTURER_EXISTS + ", Try again ");
+//        }
+    }
+
+    private static String[] getArticles() {
+        s.nextLine();
+        System.out.println("enter articles written by the Doctor, seperated by spaces");
+        return s.nextLine().split(" ");
     }
 
     public static void main(String[] args) {
