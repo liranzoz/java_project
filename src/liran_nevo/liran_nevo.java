@@ -1,9 +1,11 @@
 //    Liran Zozulya & Nevo Glanz
 package liran_nevo;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static liran_nevo.eStatus.*;
+
 public class liran_nevo {
-    //update
     static Scanner s = new Scanner(System.in);
     private static final String[] MENU = {
             "exit menu",
@@ -23,9 +25,9 @@ public class liran_nevo {
             "duplicate committee",
             "remove lecturer from committee"
     };
-
+    // i/o method run
     public static void run(College college) {
-        int userChoice;
+        int userChoice =-1;
         do {
             System.out.println("---------menu---------");
             System.out.println("enter the number of the option:");
@@ -33,7 +35,13 @@ public class liran_nevo {
                 System.out.println(i + ") " + MENU[i]);
             }
             System.out.print("your choice: ");
-            userChoice = s.nextInt();
+            try {
+                userChoice = s.nextInt();
+            }catch (InputMismatchException e){
+                System.out.println("Error- enter an integer number");
+                s.nextLine();
+                continue;
+            }
             switch (userChoice) {
                 case 0 -> {
                     System.out.println("Thanks, See You...");
@@ -54,23 +62,23 @@ public class liran_nevo {
                 case 14 -> System.out.println("14");
                 case 15 -> System.out.println("15");
 
-                default -> System.out.println("invalid option");
+                default -> System.out.println("invalid option, enter a number 0 - "+ ((MENU.length)-1) +" please");
             }
         } while (userChoice != 0);
     }
-
+    //output method
     private static void showAllCommittee(College college) {
         for (int i = 0; i < college.getNumOfCommittees(); i++) {
             System.out.println(college.getCommittees()[i]);
         }
     }
-
+    //output method
     private static void showAllLecturers(College college) {
         for (int i = 0; i < college.getNumOfLecturers(); i++) {
             System.out.println(college.getLecturers()[i]);
         }
     }
-
+    // i/o method to get details for action
     private static void getDepartmentDetails(College college, String show) { //dep salaries
         s.nextLine();
         System.out.println("enter department name: ");
@@ -78,16 +86,16 @@ public class liran_nevo {
         String name = s.nextLine();
         try {
             college.showAverageSalaryByDep(name);
-        }catch(DepartmentDontExistException e){
+        }catch(CollegeExceptions e){
             System.out.println(e.getMessage());
         }
     }
-
+    // output method
     private static void showAverageSalaryAllLecturers(College college) {
        double average = Util.getAverage(college.getLecturers(), college.getNumOfLecturers());
         System.out.println(average);
     }
-
+    // i/o method to get details for action
     private static void getLecturerDepDetails(College college) {
         s.nextLine();
         System.out.println("What department? ");
@@ -98,11 +106,11 @@ public class liran_nevo {
         String lecturerName = s.nextLine();
         try {
             college.addLecturerToDep(depName, lecturerName);
-        }catch (LecturerExistException | LecturerDontExistException | DepartmentDontExistException e){
+        }catch (CollegeExceptions e){
             System.out.println(e.getMessage());
         }
     }
-
+    // i/o method to get details for action
     private static void getDepartmentDetails(College college) {
         s.nextLine();
         System.out.println("enter department name- ");
@@ -111,11 +119,11 @@ public class liran_nevo {
         int num = s.nextInt();
         try {
             college.addStudyDepartment(name, num);
-        }catch(DepartmentExistException e){
+        }catch(CollegeExceptions e){
             System.out.println(e.getMessage());
         }
     }
-
+    // i/o method to get details for action
     private static void getHeadDetails(College college) {
         s.nextLine();
         System.out.println("What Committee: ");
@@ -126,14 +134,20 @@ public class liran_nevo {
         String newHead = s.nextLine();
         try {
             college.updateHeadOfCommittee(committeeName, newHead);
-        }catch (HeadNotValidException | LecturerDontExistException |
-                CommitteeDontExistException e){
+        }catch (CollegeExceptions e){
             System.out.println(e.getMessage());
         }
 
     }
-
+    // i/o method to get details for action
     private static void getLecturerCommitteeDetails(College college, String remove) {
+        if (college.getCommittees().length == 0){
+            System.out.println(new CommitteeException(NO_COMMITTES_REMOVE.toString()).getMessage());
+            return;
+        }
+        if (college.getLecturers().length==0){
+            System.out.println(new LecturerException(NO_LECTURERS_REMOVE.toString()).getMessage());
+        }
         s.nextLine();
         String lecturerName, committeeName;
         System.out.println("enter lecturer name: ");
@@ -144,12 +158,20 @@ public class liran_nevo {
         committeeName = s.nextLine();
         try {
             college.removeLecturerFromCommittee(lecturerName, committeeName);
-        }catch(CommitteeDontExistException | LecturerDontExistException e){
+        }catch(CollegeExceptions e){
             System.out.println(e.getMessage());
         }
     }
-
+    // i/o method to get details for action
     private static void getLecturerCommitteeDetails(College college) {
+        if (college.getLecturers().length==0){
+            System.out.println(new LecturerException(NO_LECTURERS_ADD.toString()).getMessage());
+            return;
+        }
+        if (college.getCommittees().length==0){
+            System.out.println(new CommitteeException(NO_COMMITTES_ADD.toString()).getMessage());
+            return;
+        }
         s.nextLine();
         String lecturerName, committeeName;
         System.out.println("enter lecturer name: ");
@@ -160,11 +182,11 @@ public class liran_nevo {
         committeeName = s.nextLine();
         try {
             college.addLecturerToCommittee(Util.getLecturerFromName(lecturerName, college.getLecturers()), Util.getCommitteeFromName(committeeName, college.getCommittees()));
-        }catch (LecturerExistException | CommitteeDontExistException e){
+        }catch (CollegeExceptions e){
             System.out.println(e.getMessage());
         }
     }
-
+    // i/o method to get details for action
     private static void getCommitteeDetails(College college) {
         s.nextLine();
         System.out.println("enter committee name: ");
@@ -178,11 +200,11 @@ public class liran_nevo {
         String headName = s.nextLine();
         try {
             college.addCommittee(name, Util.getLecturerFromName(headName, college.getLecturers()));
-        }catch (CommitteExistException | HeadNotValidException e){
+        }catch (CollegeExceptions e){
             System.out.println(e.getMessage());
         }
     }
-
+    // i/o method to get details for action
     private static void getLecturerDetails(College college) {
         s.nextLine();
         System.out.println("enter name: ");
@@ -218,7 +240,7 @@ public class liran_nevo {
                     college.addLecturer(name, id, deg, degName, salary, articles, inst);
                 }
             }
-        }catch (LecturerExistException e){
+        }catch (CollegeExceptions e){
             System.out.println(e.getMessage());
         }
 //        if (degree == 4){ // if professor - get the name of body

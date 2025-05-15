@@ -2,6 +2,8 @@ package liran_nevo;
 
 import java.util.Arrays;
 
+import static liran_nevo.eStatus.*;
+
 public class Lecturer {
     public enum eDegreeType {BSc, MSc, DOCTOR, PROFESSOR}
 
@@ -23,14 +25,14 @@ public class Lecturer {
         this.committees = new Committee[0];
     }
 
-    public eStatus addCommittee(Committee committee) {
+    public eStatus addCommittee(Committee committee) throws CollegeExceptions {
         if (this.committees.length == this.numOfCommittees) {
             this.committees = Arrays.copyOf(committees, committees.length == 0 ? 1 : committees.length * 2);
         }
         if (!Util.isExist(committee.getName(), committees, numOfCommittees)) {
             this.committees[numOfCommittees++] = committee;
         } else {
-            return eStatus.LECTURER_EXISTS;
+            throw new LecturerException(LECTURER_EXIST.toString());
         }
         return eStatus.SUCCESS;
     }

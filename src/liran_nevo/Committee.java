@@ -57,7 +57,11 @@ public class Committee {
 
     public void setHead(Lecturer head) {
             this.head = head;
-            head.addCommittee(this);
+            try {
+                head.addCommittee(this);
+            }catch (CollegeExceptions e){
+                System.out.println(e.getMessage());
+            }
     }
 
     public void addLecturerToCommittee(Lecturer lecturer) {
