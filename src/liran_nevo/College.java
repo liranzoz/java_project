@@ -140,6 +140,42 @@ public class College {
         lecturers[numOfLecturers++] = new Professor(name, id, degree, degName, salary,articles, inst);
     }
 
+    public String comparisonDocProf() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nNumber of articles for doctors:\n");
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturers[i] instanceof Doctor && !(lecturers[i] instanceof Professor)) {
+                sb.append(lecturers[i].getName()).append(": ").append(((Doctor) lecturers[i]).articlesToStringComparison()).append("\n");
+            }
+        }
+        sb.append("\nNumber of articles for professors:\n");
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturers[i] instanceof Professor) {
+                sb.append(lecturers[i].getName()).append(": ").append(((Professor) lecturers[i]).articlesToStringComparison()).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    public String compareByNumOfLec() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Comparison by number of lecturers in department:\n ");
+        for (int i = 0; i <numOfDepartments; i++){
+            sb.append("\n").append(i).append(1).append(")").append(departments[i].getName())
+                    .append(", number of lecturers: ").append(departments[i].getNumOfLecturers()).append("\n");
+        }
+        return sb.toString();
+    }
+
+    public String compareByNumOfArt(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Comparison by number of Articles in department:\n ");
+        for (int i = 0; i <numOfDepartments; i++){
+            sb.append("\n").append(i).append(1).append(")").append(departments[i].getName())
+                    .append(", number of Articles: ").append(departments[i].getNumOfArticles()).append("\n");
+        }
+        return sb.toString();
+    }
 
     public void setCollegeName(String collegeName) {
         this.collegeName = collegeName;
@@ -176,4 +212,6 @@ public class College {
     public static int getNumOfCommittees() {
         return numOfCommittees;
     }
+
+
 }

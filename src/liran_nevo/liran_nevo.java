@@ -20,7 +20,7 @@ public class liran_nevo {
             "show average salary by department",
             "show all lecturers data",
             "show all committees data",
-            "compare Doctor/ professor by article number",
+            "compare Doctor/ professor by number of articles",
             "compare department",// 2 קריטריונים
             "duplicate committee",
             "remove lecturer from committee"
@@ -38,7 +38,7 @@ public class liran_nevo {
             try {
                 userChoice = s.nextInt();
             }catch (InputMismatchException e){
-                System.out.println("Error- enter an integer number");
+                System.out.println("Error: enter an integer number");
                 s.nextLine();
                 continue;
             }
@@ -57,8 +57,8 @@ public class liran_nevo {
                 case 9 -> getDepartmentDetails(college, "show");
                 case 10 -> showAllLecturers(college);
                 case 11 -> showAllCommittee(college);
-                case 12 -> System.out.println("12");
-                case 13 -> System.out.println("13");
+                case 12 -> comparisonDocProfByArticles(college);
+                case 13 -> comparisonDepsByCriteria(college);// 2 קריטריונים
                 case 14 -> System.out.println("14");
                 case 15 -> System.out.println("15");
 
@@ -66,6 +66,29 @@ public class liran_nevo {
             }
         } while (userChoice != 0);
     }
+
+    private static void comparisonDepsByCriteria(College college) {
+        System.out.println("Enter which criteria you want to compare (enter number): ");
+        System.out.println("1 - Compare by number of lecturers");
+        System.out.println("2 - Compare by number of articles");
+        int choice = s.nextInt();
+        while (true){
+            try {
+                switch (choice){
+                    case 1 -> college.compareByNumOfLec();
+                    case 2 -> college.compareByNumOfArt();
+                }
+                break;
+            }catch (InputMismatchException e){
+                System.out.println("Error: wrong input. Try again..");
+            }
+        }
+    }
+
+    private static void comparisonDocProfByArticles(College college) {
+        System.out.println(college.comparisonDocProf());
+    }
+
     //output method
     private static void showAllCommittee(College college) {
         for (int i = 0; i < college.getNumOfCommittees(); i++) {

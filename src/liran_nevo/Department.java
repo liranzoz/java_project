@@ -21,7 +21,7 @@ public class Department {
                 break;
             }
             for (int j = pos; j < lecturers.length; j++) {
-                if (lecturers[j + 1] == null) {
+                if (lecturers[j + 1] == null || j + 1 > lecturers.length) {
                     break;
                 }
                 lecturers[j] = lecturers[j + 1];
@@ -35,6 +35,16 @@ public class Department {
         }
         lecturers[numOfLecturers++] = lecturer;
         lecturer.setDepartment(this);
+    }
+
+    public int getNumOfArticles(){
+        int numA = 0;
+        for (int i = 0; i <numOfLecturers ; i++) {
+            if (lecturers[i] instanceof Doctor){
+                numA += ((Doctor) lecturers[i]).getNumOfArticles();
+            }
+        }
+        return numA;
     }
 
     public String getName() {
