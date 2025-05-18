@@ -75,8 +75,8 @@ public class liran_nevo {
         while (true){
             try {
                 switch (choice){
-                    case 1 -> college.compareByNumOfLec();
-                    case 2 -> college.compareByNumOfArt();
+                    case 1 -> System.out.println(college.compareByNumOfLec());
+                    case 2 -> System.out.println(college.compareByNumOfArt());
                 }
                 break;
             }catch (InputMismatchException e){
