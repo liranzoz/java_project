@@ -5,6 +5,7 @@ import java.util.Arrays;
 import static liran_nevo.eStatus.*;
 
 public class Lecturer {
+
     public enum eDegreeType {BSc, MSc, DOCTOR, PROFESSOR}
 
     private String name;
@@ -25,7 +26,7 @@ public class Lecturer {
         this.committees = new Committee[0];
     }
 
-    public eStatus addCommittee(Committee committee) throws CollegeExceptions {
+    public void addCommittee(Committee committee) throws CollegeExceptions {
         if (this.committees.length == this.numOfCommittees) {
             this.committees = Arrays.copyOf(committees, committees.length == 0 ? 1 : committees.length * 2);
         }
@@ -34,7 +35,6 @@ public class Lecturer {
         } else {
             throw new LecturerException(LECTURER_EXIST.toString());
         }
-        return eStatus.SUCCESS;
     }
 
     public String getName() {
@@ -82,13 +82,10 @@ public class Lecturer {
     }
 
     public void setDepartment(Department department) {
-        Department old = this.department;
-        if(old==null) {
-            this.department = department;
-        }else{
-            old.removeLecturerFromDep(this);
-            this.department=department;
+        if(this.department != null){
+            department.removeLecturerFromDep(this);
         }
+        this.department = department;
 
     }
 

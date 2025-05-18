@@ -140,21 +140,44 @@ public class College {
         lecturers[numOfLecturers++] = new Professor(name, id, degree, degName, salary,articles, inst);
     }
 
-    public String comparisonDocProf() {
+    public String comparisonDocProf() throws LecturerException {
+        if (countDocProf() == 0){
+            throw new LecturerException(NO_DOC_PROF.toString());
+        }
         StringBuilder sb = new StringBuilder();
         sb.append("\nNumber of articles for doctors:\n");
         for (int i = 0; i < numOfLecturers; i++) {
             if (lecturers[i] instanceof Doctor && !(lecturers[i] instanceof Professor)) {
-                sb.append(lecturers[i].getName()).append(": ").append(((Doctor) lecturers[i]).articlesToStringComparison()).append("\n");
+                sb.append(lecturers[i].getName()).append(": ").append(((Doctor) lecturers[i]).getNumOfArticles()).append("\n");
             }
         }
         sb.append("\nNumber of articles for professors:\n");
         for (int i = 0; i < numOfLecturers; i++) {
             if (lecturers[i] instanceof Professor) {
-                sb.append(lecturers[i].getName()).append(": ").append(((Professor) lecturers[i]).articlesToStringComparison()).append("\n");
+                sb.append(lecturers[i].getName()).append(": ").append(((Doctor) lecturers[i]).getNumOfArticles()).append("\n");
             }
         }
         return sb.toString();
+    }
+
+    public String comparisonDocProf(Doctor d1,Doctor d2){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturers[i] == d1 || lecturers[i] == d2){
+                sb.append(lecturers[i].getName()).append(": ").append(((Doctor) lecturers[i]).getNumOfArticles()).append("\n");
+            }
+        }
+        return sb.toString();
+    }
+
+    private int countDocProf() {
+        int n = 0;
+        for (int i = 0; i < numOfLecturers; i++) {
+            if(lecturers[i] instanceof Doctor){
+                n++;
+            }
+        }
+        return n;
     }
 
     public String compareByNumOfLec() {
@@ -175,6 +198,13 @@ public class College {
                     .append(", number of Articles: ").append(departments[i].getNumOfArticles()).append("\n");
         }
         return sb.toString();
+    }
+
+    public void DuplicateComittee(String comiteeName) throws CollegeExceptions{
+        if (Util.getCommitteeFromName(comiteeName,committees) == null){
+            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
+        }
+        this.addCommittee(comiteeName+" - new",Util.getCommitteeFromName(comiteeName,committees).getHead());
     }
 
     public void setCollegeName(String collegeName) {
@@ -209,9 +239,10 @@ public class College {
         return numOfLecturers;
     }
 
-    public static int getNumOfCommittees() {
+    public int getNumOfCommittees() {
         return numOfCommittees;
     }
+
 
 
 }

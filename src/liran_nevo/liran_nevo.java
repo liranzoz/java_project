@@ -27,66 +27,119 @@ public class liran_nevo {
     };
     // i/o method run
     public static void run(College college) {
-        int userChoice =-1;
-        do {
-            System.out.println("---------menu---------");
-            System.out.println("enter the number of the option:");
-            for (int i = 0; i < MENU.length; i++) {
-                System.out.println(i + ") " + MENU[i]);
-            }
-            System.out.print("your choice: ");
-            try {
-                userChoice = s.nextInt();
-            }catch (InputMismatchException e){
-                System.out.println("Error: enter an integer number");
-                s.nextLine();
-                continue;
-            }
-            switch (userChoice) {
-                case 0 -> {
-                    System.out.println("Thanks, See You...");
-                }
-                case 1 -> getLecturerDetails(college);
-                case 2 -> getCommitteeDetails(college);
-                case 3 -> getLecturerCommitteeDetails(college);
-                case 4 -> getHeadDetails(college);
-                case 5 -> getLecturerCommitteeDetails(college,"remove");
-                case 6 -> getDepartmentDetails(college);
-                case 7 -> getLecturerDepDetails(college);
-                case 8 -> showAverageSalaryAllLecturers(college);
-                case 9 -> getDepartmentDetails(college, "show");
-                case 10 -> showAllLecturers(college);
-                case 11 -> showAllCommittee(college);
-                case 12 -> comparisonDocProfByArticles(college);
-                case 13 -> comparisonDepsByCriteria(college);// 2 קריטריונים
-                case 14 -> System.out.println("14");
-                case 15 -> System.out.println("15");
+            int userChoice = -1;
+            do {
+                try {
+                    System.out.println("---------menu---------");
+                    System.out.println("enter the number of the option:");
+                    for (int i = 0; i < MENU.length; i++) {
+                        System.out.println(i + ") " + MENU[i]);
+                    }
+                    System.out.print("your choice: ");
+                    try {
+                        userChoice = s.nextInt();
+                    } catch (InputMismatchException e) {
+                        System.out.println("Error: enter an integer number");
+                        s.nextLine();
+                        continue;
+                    }
+                    switch (userChoice) {
+                        case 0 -> {
+                            System.out.println("Thanks, See You...");
+                        }
+                        case 1 -> getLecturerDetails(college);
+                        case 2 -> getCommitteeDetails(college);
+                        case 3 -> getLecturerCommitteeDetails(college);
+                        case 4 -> getHeadDetails(college);
+                        case 5 -> getLecturerCommitteeDetails(college, "remove");
+                        case 6 -> getDepartmentDetails(college);
+                        case 7 -> getLecturerDepDetails(college);
+                        case 8 -> showAverageSalaryAllLecturers(college);
+                        case 9 -> getDepartmentDetails(college, "show");
+                        case 10 -> showAllLecturers(college);
+                        case 11 -> showAllCommittee(college);
+                        case 12 -> comparisonDocProfByArticles(college);
+                        case 13 -> comparisonDepsByCriteria(college);// 2 קריטריונים
+                        case 14 -> duplicateCommitte(college);
+                        case 15 -> System.out.println("15");
 
-                default -> System.out.println("invalid option, enter a number 0 - "+ ((MENU.length)-1) +" please");
-            }
-        } while (userChoice != 0);
+                        default ->
+                                System.out.println("invalid option, enter a number 0 - " + ((MENU.length) - 1) + " please");
+                    }
+                }catch(CollegeExceptions e){
+                    System.out.println(e.getMessage());
+                }
+            } while (userChoice != 0);
+
     }
 
-    private static void comparisonDepsByCriteria(College college) {
+    private static void duplicateCommitte(College college)throws CollegeExceptions {
+        if (college.getNumOfCommittees() == 0){
+            throw new CommitteeException(NO_COMMITTES.toString());
+        }
+        s.nextLine();
+        System.out.println("what committee?");
+        Util.printArraysByName(college.getCommittees());
+        String comiteeName = s.nextLine();
+        college.DuplicateComittee(comiteeName);
+    }
+
+    private static void comparisonDepsByCriteria(College college)throws CollegeExceptions {
         System.out.println("Enter which criteria you want to compare (enter number): ");
         System.out.println("1 - Compare by number of lecturers");
         System.out.println("2 - Compare by number of articles");
-        int choice = s.nextInt();
+
         while (true){
             try {
+                int choice = s.nextInt();
                 switch (choice){
                     case 1 -> college.compareByNumOfLec();
                     case 2 -> college.compareByNumOfArt();
+
                 }
-                break;
             }catch (InputMismatchException e){
-                System.out.println("Error: wrong input. Try again..");
+                s.nextLine();
+                throw new CollegeExceptions("wrong input. Try again..");
+//                System.out.println("Error: wrong input. Try again..");
             }
         }
     }
 
-    private static void comparisonDocProfByArticles(College college) {
-        System.out.println(college.comparisonDocProf());
+    private static void comparisonDocProfByArticles(College college)throws CollegeExceptions {
+        try {
+            System.out.println("1) show all\n2)compare 2");
+            int ans =s.nextInt();
+            switch (ans) {
+                case 1 -> System.out.println(college.comparisonDocProf());
+                case 2 ->{
+                    s.nextLine();
+                    Lecturer d1,d2;
+                    boolean go1= false,go2 = false;
+                    do { //todo
+                        System.out.println("enter 1st name- ");
+                        d1 = Util.getLecturerFromName(s.nextLine(), college.getLecturers());
+                        if (!(d1 instanceof Doctor)) {
+                            System.out.println("choose a doctor/ professor");
+                        }else{
+                            go1 = true;
+                        }
+                    }while(!go1);
+                    do {//todo
+                        System.out.println("enter 2nd name- ");
+                        d2 = Util.getLecturerFromName(s.nextLine(), college.getLecturers());
+                        if (!(d2 instanceof Doctor)){
+                            System.out.println("choose a doctor/ professor");
+                        }else{
+                            go2 = true;
+                        }
+                    }while(!go2);
+                    System.out.println(college.comparisonDocProf((Doctor) d1,(Doctor) d2));
+                }
+            }
+        }catch (CollegeExceptions e) {
+            System.out.println(e.getMessage());
+            return;
+        }
     }
 
     //output method
