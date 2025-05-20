@@ -76,6 +76,9 @@ public class College {
         if (!(Util.getLecturerFromName(newHead,lecturers) instanceof Doctor doctor)){
             throw new LecturerException(HEAD_NOT_VALID.toString());
         }
+        Committee c = Util.getCommitteeFromName(committeeName,committees);
+        Lecturer head = c.getHead();
+        head.removeCommitte(c);
         Util.getCommitteeFromName(committeeName,committees).setHead(Util.getLecturerFromName(newHead,lecturers));
     }
 

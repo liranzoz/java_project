@@ -15,7 +15,8 @@ public enum eStatus {
     NO_LECTURERS_REMOVE("no lecturers to remove"),
     NO_DOC_PROF("no Doctors/ professors in collage"),
     GENERAL_ERROR("Something Went Wrong..."),
-    NO_COMMITTES("no Committees");
+    NO_COMMITTES("no Committees"),
+    LECT_IS_HEAD("this lecturer is the head of this committe");
 
     private final String description;
 

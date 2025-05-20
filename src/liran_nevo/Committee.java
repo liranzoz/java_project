@@ -2,6 +2,8 @@ package liran_nevo;
 
 import java.util.Arrays;
 
+import static liran_nevo.eStatus.*;
+
 public class Committee {
     private String name;
     private Lecturer[] lecturers = new Lecturer[0];
@@ -13,17 +15,23 @@ public class Committee {
         setHead(head);
     }
 
-    public boolean removeLecturerByName(String name) {
+    public void removeLecturerByName(String name) throws LecturerException {
+        if (!Util.isExist(name,lecturers,numOfLecturers)){
+            throw new LecturerException(LECTURER_DONT_EXIST.toString());
+        }
+        if (Util.getLecturerFromName(name,lecturers).equals(this.head)){
+            throw new LecturerException(LECT_IS_HEAD.toString());
+        }
         for (int i = 0; i < numOfLecturers; i++) {
             if (lecturers[i].getName().equals(name)) {
                 for (int j = i; j < numOfLecturers - 1; j++) {
                     lecturers[j] = lecturers[j + 1];
                 }
-                lecturers[numOfLecturers - 1] = null;
-                return true;
+
             }
         }
-        return false;
+        lecturers[numOfLecturers - 1] = null;
+        numOfLecturers--;
     }
 
     public int getNumOfLecturers() {
@@ -64,7 +72,10 @@ public class Committee {
             }
     }
 
-    public void addLecturerToCommittee(Lecturer lecturer) {
+    public void addLecturerToCommittee(Lecturer lecturer) throws LecturerException {
+        if (this.head.equals(lecturer)){
+            throw new LecturerException(LECT_IS_HEAD.toString());
+        }
         if(numOfLecturers==lecturers.length){
             lecturers= Arrays.copyOf(lecturers,lecturers.length==0?1:lecturers.length*2);
         }

@@ -8,22 +8,22 @@ import static liran_nevo.eStatus.*;
 public class liran_nevo {
     static Scanner s = new Scanner(System.in);
     private static final String[] MENU = {
-            "exit menu",
-            "add lecturer to college",
-            "add committee to college",
-            "add lecturer to committee",
-            "update head of committee",
-            "remove lecturer from committee",
-            "add department",
-            "add lecturer to department",
-            "show average salary - all lecturers",
-            "show average salary by department",
-            "show all lecturers data",
-            "show all committees data",
-            "compare Doctor/ professor by number of articles",
-            "compare department",// 2 קריטריונים
-            "duplicate committee",
-            "remove lecturer from committee"
+            "exit menu",//0
+            "add lecturer to college",//1
+            "add committee to college",//2
+            "add lecturer to committee",//3
+            "update head of committee",//4
+            "remove lecturer from committee",//5
+            "add department",//6
+            "add lecturer to department",//7
+            "show average salary - all lecturers",//8
+            "show average salary by department",//9
+            "show all lecturers data",//10
+            "show all committees data",//11
+            "compare Doctor/ professor by number of articles",//12
+            "compare department",//13
+            "duplicate committee",//14 - 2קריטריונים
+            "remove lecturer from committee"//15
     };
     // i/o method run
     public static void run(College college) {
@@ -61,7 +61,7 @@ public class liran_nevo {
                         case 12 -> comparisonDocProfByArticles(college);
                         case 13 -> comparisonDepsByCriteria(college);// 2 קריטריונים
                         case 14 -> duplicateCommitte(college);
-                        case 15 -> System.out.println("15");
+                        case 15 -> removeLecturerFromCommitte(college);
 
                         default ->
                                 System.out.println("invalid option, enter a number 0 - " + ((MENU.length) - 1) + " please");
@@ -71,6 +71,23 @@ public class liran_nevo {
                 }
             } while (userChoice != 0);
 
+    }
+
+    private static void removeLecturerFromCommitte(College college) throws CollegeExceptions {
+        s.nextLine();
+        if (college.getNumOfCommittees() == 0){
+            throw new CommitteeException(NO_COMMITTES_REMOVE.toString());
+        }
+        System.out.println("what committee?");
+        String committeName = s.nextLine();
+        Committee c = Util.getCommitteeFromName(committeName,college.getCommittees());
+        if (c == null){
+            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
+        }
+        System.out.println("what lecturer?");
+        Util.printArraysByName(c.getLecturers());
+        String lectName = s.nextLine();
+        c.removeLecturerByName(lectName);
     }
 
     private static void duplicateCommitte(College college)throws CollegeExceptions {
@@ -169,7 +186,7 @@ public class liran_nevo {
     // output method
     private static void showAverageSalaryAllLecturers(College college) {
        double average = Util.getAverage(college.getLecturers(), college.getNumOfLecturers());
-        System.out.println(average);
+       System.out.println(average);
     }
     // i/o method to get details for action
     private static void getLecturerDepDetails(College college) {
@@ -263,7 +280,7 @@ public class liran_nevo {
         }
     }
     // i/o method to get details for action
-    private static void getCommitteeDetails(College college) {
+    private static void getCommitteeDetails(College college) throws LecturerException {
         s.nextLine();
         System.out.println("enter committee name: ");
         String name = s.nextLine();
@@ -274,6 +291,9 @@ public class liran_nevo {
             }
         }
         String headName = s.nextLine();
+        if (!Util.isExist(headName,college.getLecturers(),college.getNumOfLecturers())){
+            throw new LecturerException(LECTURER_DONT_EXIST.toString());
+        }
         try {
             college.addCommittee(name, Util.getLecturerFromName(headName, college.getLecturers()));
         }catch (CollegeExceptions e){
@@ -281,7 +301,7 @@ public class liran_nevo {
         }
     }
     // i/o method to get details for action
-    private static void getLecturerDetails(College college) {
+    private static void getLecturerDetails(College college) throws InputMismatchException {
         s.nextLine();
         System.out.println("enter name: ");
         String name = s.nextLine();
@@ -300,8 +320,20 @@ public class liran_nevo {
         s.nextLine();
         System.out.println("enter degree name: ");
         String degName = s.nextLine();
-        System.out.println("enter salary: ");
-        int salary = s.nextInt();
+        int salary = 0;
+        boolean go = false;
+        while (!go) {
+            try {
+                System.out.println("enter salary: ");
+                salary = s.nextInt();
+                if (salary != 0) {
+                    go = true;
+                }
+            }catch (InputMismatchException e){
+                s.nextLine();
+                System.out.println("enter an integer");
+            }
+        }
         try {
             switch (degree) {
                 case 1, 2 -> college.addLecturer(name, id, deg, degName, salary);

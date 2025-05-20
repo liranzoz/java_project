@@ -6,6 +6,20 @@ import static liran_nevo.eStatus.*;
 
 public class Lecturer {
 
+    public void removeCommitte(Committee c) throws CommitteeException {
+        if(!Util.isExist(c.getName(),committees,numOfCommittees)){
+            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
+        }
+        for (int i = 0; i < numOfCommittees; i++) {
+            if (committees[i].equals(c)){
+                for (int j = i; j < numOfCommittees -1; j++) {
+                    committees[i] = committees[i+1];
+                }
+            }
+        }
+        committees[--numOfCommittees]=null;
+    }
+
     public enum eDegreeType {BSc, MSc, DOCTOR, PROFESSOR}
 
     private String name;
@@ -33,7 +47,7 @@ public class Lecturer {
         if (!Util.isExist(committee.getName(), committees, numOfCommittees)) {
             this.committees[numOfCommittees++] = committee;
         } else {
-            throw new LecturerException(LECTURER_EXIST.toString());
+            throw new CommitteeException(COMMITTEE_EXIST.toString());
         }
     }
 
@@ -92,18 +106,21 @@ public class Lecturer {
     @Override
     public String toString() {
         System.out.println();
-        StringBuilder sb = new StringBuilder("lecturer: "+name+" | id: "+id+" | degree: "+degree+" | degree name: "+degreeName+"\ncommittees: ") ;
+        StringBuilder sb = new StringBuilder("lecturer: "+name+" | id: "+id+" | degree: "+degree+" | degree name: "+degreeName+" | salary:"+salary+"\ncommittees: ") ;
         if (numOfCommittees == 0){
             sb.append("no committees");
         }else {
         for (Committee c : committees) {
             if (c != null) {
                 sb.append(" ").append(c.getName());
+                if (c.getHead().equals(this)){
+                    sb.append("(head) ");
+                }
             }
         }
         }
         if(department!=null) {
-            sb.append("\ndepartments: ").append(department.getName());
+            sb.append("\ndepartment: ").append(department.getName());
         }else {
             sb.append("\ndepartments: no departments");
         }

@@ -6,7 +6,7 @@ public class Util {
     public static int getNumOfDocProf(Lecturer[] lecturers) {
         int counter = 0;
         for (Lecturer l : lecturers) {
-            if (l.getDegree().equals(Lecturer.eDegreeType.DOCTOR) || l.getDegree().equals(Lecturer.eDegreeType.PROFESSOR)) {
+            if (l != null && l instanceof Doctor){
                 counter++;
             }
         }
