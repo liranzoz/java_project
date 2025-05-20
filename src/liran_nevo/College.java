@@ -187,7 +187,7 @@ public class College {
         StringBuilder sb = new StringBuilder();
         sb.append("Comparison by number of lecturers in department:\n ");
         for (int i = 0; i <numOfDepartments; i++){
-            sb.append("\n").append(i).append(1).append(")").append(departments[i].getName())
+            sb.append("\n").append(i+1).append(")").append(departments[i].getName())
                     .append(", number of lecturers: ").append(departments[i].getNumOfLecturers()).append("\n");
         }
         return sb.toString();
@@ -197,7 +197,7 @@ public class College {
         StringBuilder sb = new StringBuilder();
         sb.append("Comparison by number of Articles in department:\n ");
         for (int i = 0; i <numOfDepartments; i++){
-            sb.append("\n").append(i).append(1).append(")").append(departments[i].getName())
+            sb.append("\n").append(i+1).append(")").append(departments[i].getName())
                     .append(", number of Articles: ").append(departments[i].getNumOfArticles()).append("\n");
         }
         return sb.toString();
