@@ -16,7 +16,8 @@ public enum eStatus {
     NO_DOC_PROF("no Doctors/ professors in collage"),
     GENERAL_ERROR("Something Went Wrong..."),
     NO_COMMITTES("no Committees"),
-    LECT_IS_HEAD("this lecturer is the head of this committe");
+    LECT_IS_HEAD("this lecturer is the head of this committe"),
+    NOT_DOC("lecturer is not doctor/ professor");
 
     private final String description;
 

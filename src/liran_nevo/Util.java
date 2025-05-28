@@ -109,6 +109,14 @@ public class Util {
         }
     }
 
+    public static void printDocProf(Lecturer[] lecturers,int numOfLecturers){
+        for (int i = 0; i < numOfLecturers; i++) {
+            if (lecturers[i] instanceof Doctor){
+                System.out.println(i + ") " + lecturers[i].getName());
+            }
+        }
+    }
+
     public static void printArraysByName(Committee[] arr) {
         System.out.println("existing committees (enter name):");
         int i = 1;

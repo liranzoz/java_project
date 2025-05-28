@@ -1,8 +1,9 @@
 package liran_nevo;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
-public class Doctor extends Lecturer{
+public class Doctor extends Lecturer implements Comparable<Doctor> {
     private String[] articles;
     private int numOfArticles;
     public Doctor(String name, String id, eDegreeType degree, String degName, int salary, String[] articles) {
@@ -38,5 +39,10 @@ public class Doctor extends Lecturer{
 
         }
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Doctor doctor) {
+        return Integer.compare(this.numOfArticles,doctor.numOfArticles);
     }
 }

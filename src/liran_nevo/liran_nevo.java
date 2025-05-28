@@ -123,40 +123,29 @@ public class liran_nevo {
     }
 
     private static void comparisonDocProfByArticles(College college)throws CollegeExceptions {
-        try {
-            System.out.println("1) show all\n2)compare 2");
-            int ans =s.nextInt();
-            switch (ans) {
-                case 1 -> System.out.println(college.comparisonDocProf());
-                case 2 ->{
-                    s.nextLine();
-                    Lecturer d1,d2;
-                    boolean go1= false,go2 = false;
-                    do { //todo
-                        System.out.println("enter 1st name- ");
-                        d1 = Util.getLecturerFromName(s.nextLine(), college.getLecturers());
-                        if (!(d1 instanceof Doctor)) {
-                            System.out.println("choose a doctor/ professor");
-                        }else{
-                            go1 = true;
-                        }
-                    }while(!go1);
-                    do {//todo
-                        System.out.println("enter 2nd name- ");
-                        d2 = Util.getLecturerFromName(s.nextLine(), college.getLecturers());
-                        if (!(d2 instanceof Doctor)){
-                            System.out.println("choose a doctor/ professor");
-                        }else{
-                            go2 = true;
-                        }
-                    }while(!go2);
-                    System.out.println(college.comparisonDocProf((Doctor) d1,(Doctor) d2));
-                }
-            }
-        }catch (CollegeExceptions e) {
-            System.out.println(e.getMessage());
-            return;
+        s.nextLine();
+        System.out.println("enter name of first doc/prof: ");
+        Util.printDocProf(college.getLecturers(),college.getNumOfLecturers());
+        String firstName = s.nextLine();
+        Lecturer one = Util.getLecturerFromName(firstName,college.getLecturers());
+        if (one == null){
+            throw new LecturerException(LECTURER_DONT_EXIST.toString());
         }
+        if (!(one instanceof Doctor)){
+            throw new LecturerException(NOT_DOC.toString());
+        }
+        System.out.println("enter name of second doc/prof: ");
+        Util.printDocProf(college.getLecturers(),college.getNumOfLecturers());
+        String secName = s.nextLine();
+        Lecturer two = Util.getLecturerFromName(firstName,college.getLecturers());
+        if (two == null){
+            throw new LecturerException(LECTURER_DONT_EXIST.toString());
+        }
+        if (!(two instanceof Doctor)){
+            throw new LecturerException(NOT_DOC.toString());
+        }
+        System.out.println(((Doctor) one).compareTo((Doctor)two));
+
     }
 
     //output method
