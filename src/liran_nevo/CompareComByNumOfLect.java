@@ -2,7 +2,7 @@ package liran_nevo;
 
 import java.util.Comparator;
 
-public class CompareDepByNumOfLect implements Comparator<Committee> {
+public class CompareComByNumOfLect implements Comparator<Committee> {
 
     @Override
     public int compare(Committee c1, Committee c2) {
