@@ -54,11 +54,14 @@ public class College {
 
 
     public void removeLecturerFromCommittee(String lecturerName, String committeName)throws CollegeExceptions {
+        if (numOfCommittees == 0){
+            throw new CommitteeException(NO_COMMITTES_REMOVE.toString());
+        }
         if(!Util.isExist(committeName,committees,numOfCommittees)){
             throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
         }
         Committee c = Util.getCommitteeFromName(committeName,committees);
-        if (c.getLecturers().length == 0){
+        if (c.getNumOfLecturers() == 0){
             throw new LecturerException(NO_LECTURERS_REMOVE.toString());
         }
         if(!Util.isExist(lecturerName,c.getLecturers(),c.getNumOfLecturers())){
@@ -84,6 +87,9 @@ public class College {
     }
 
     public void addLecturerToCommittee(Lecturer lecturer, Committee committee) throws CollegeExceptions {
+        if (numOfLecturers == 0){
+            throw new LecturerException(NO_LECTURERS_ADD.toString());
+        }
         if(committees.length==0){
             throw new CommitteeException(NO_COMMITTES_ADD.toString());
         }
@@ -105,20 +111,21 @@ public class College {
         }
         committees[numOfCommittees++] = clone;
     }
-    public void addCommittee(String name, Lecturer head)throws CollegeExceptions {
-        if(!Util.isDocProf(head)){
+    public void addCommittee(String name, String headName)throws CollegeExceptions {
+        Lecturer head = Util.getLecturerFromName(headName, lecturers);
+        if(head == null || !(head instanceof Doctor)){
             throw new LecturerException(HEAD_NOT_VALID.toString());
         }
         if (Util.isExist(name,committees,numOfCommittees)){
             throw new CommitteeException(COMMITTEE_EXIST.toString());
         }
-
         if (numOfCommittees == committees.length) {
             committees = (Committee[]) Util.copyArr(committees, numOfCommittees == 0 ? 1 : numOfCommittees * 2);
         }
         committees[numOfCommittees++] = new Committee(name, head);
     }
 
+    // add lecturer
     public void addLecturer(String name,String id,Lecturer.eDegreeType degree,String degName,int salary)throws CollegeExceptions {
         if(Util.isExist(name,lecturers,numOfLecturers)){
             throw new LecturerException(LECTURER_EXIST.toString());
@@ -129,6 +136,7 @@ public class College {
         lecturers[numOfLecturers++] = new Lecturer(name, id, degree, degName, salary);
     }
 
+    // override - add lecturer for Doctor
     public void addLecturer(String name,String id,Lecturer.eDegreeType degree,String degName,int salary,String[] articles)throws CollegeExceptions{
         if(Util.isExist(name,lecturers,numOfLecturers)){
             throw new LecturerException(LECTURER_EXIST.toString());
@@ -139,6 +147,7 @@ public class College {
         lecturers[numOfLecturers++] = new Doctor(name, id, degree, degName, salary,articles);
     }
 
+    // override - add lecturer for Professor
     public void addLecturer(String name,String id,Lecturer.eDegreeType degree,String degName,int salary,String[] articles, String inst)throws CollegeExceptions {
         if(Util.isExist(name,lecturers,numOfLecturers)){
             throw new LecturerException(LECTURER_EXIST.toString());
@@ -189,25 +198,25 @@ public class College {
         return n;
     }
 
-    public String compareByNumOfLec() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Comparison by number of lecturers in department:\n ");
-        for (int i = 0; i <numOfDepartments; i++){
-            sb.append("\n").append(i+1).append(")").append(departments[i].getName())
-                    .append(", number of lecturers: ").append(departments[i].getNumOfLecturers()).append("\n");
-        }
-        return sb.toString();
-    }
-
-    public String compareByNumOfArt(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Comparison by number of Articles in department:\n ");
-        for (int i = 0; i <numOfDepartments; i++){
-            sb.append("\n").append(i+1).append(")").append(departments[i].getName())
-                    .append(", number of Articles: ").append(departments[i].getNumOfArticles()).append("\n");
-        }
-        return sb.toString();
-    }
+//    public String compareByNumOfLec() {
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("Comparison by number of lecturers in department:\n ");
+//        for (int i = 0; i <numOfDepartments; i++){
+//            sb.append("\n").append(i+1).append(")").append(departments[i].getName())
+//                    .append(", number of lecturers: ").append(departments[i].getNumOfLecturers()).append("\n");
+//        }
+//        return sb.toString();
+//    }
+//
+//    public String compareByNumOfArt(){
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("Comparison by number of Articles in department:\n ");
+//        for (int i = 0; i <numOfDepartments; i++){
+//            sb.append("\n").append(i+1).append(")").append(departments[i].getName())
+//                    .append(", number of Articles: ").append(departments[i].getNumOfArticles()).append("\n");
+//        }
+//        return sb.toString();
+//    }
 
     public void DuplicateComittee(String comiteeName) throws CollegeExceptions, CloneNotSupportedException {
         if (numOfCommittees == 0){
@@ -221,25 +230,35 @@ public class College {
     }
 
 
-
-    public int CompareComByNumOfLect(String c1, String c2) throws CommitteeException {
+    // 1- compare by lecturers
+    // 2- compare by articles
+    public int CompareCom(String c1, String c2, int criteria) throws CollegeExceptions {
         Committee com1 = Util.getCommitteeFromName(c1,committees);
         Committee com2 = Util.getCommitteeFromName(c2,committees);
+        if (criteria != 1 && criteria != 2){
+            throw new CollegeExceptions(GENERAL_ERROR.toString());
+        }
         if (com1 == null || com2 == null){
             throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
         }
-        return new CompareDepByNumOfLect().compare(com1,com2);
-    }
-
-    public int CompareComByNumOfArt(String c1, String c2) throws CommitteeException {
-        Committee com1 = Util.getCommitteeFromName(c1,committees);
-        Committee com2 = Util.getCommitteeFromName(c2,committees);
-        if (com1 == null || com2 == null){
-            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
+        switch (criteria) {
+            case 1-> {return new CompareDepByNumOfLect().compare(com1, com2);}
+            case 2-> {return new CompareDepByNumOfArt().compare(com1,com2);}
         }
-        return new CompareDepByNumOfArt().compare(com1,com2);
+        return 0;
     }
 
+    public int compareDocProf(String firstName, String secName) throws CollegeExceptions {
+        Lecturer doc1 = Util.getLecturerFromName(firstName,lecturers);
+        Lecturer doc2 = Util.getLecturerFromName(secName,lecturers);
+        if (doc1 == null || doc2 == null){
+            throw new LecturerException(LECTURER_DONT_EXIST.toString());
+        }
+        if (!(doc1 instanceof Doctor) || !(doc2 instanceof Doctor)){
+            throw new LecturerException(NOT_DOC.toString());
+        }
+        return ((Doctor) doc1).compareTo((Doctor) doc2);
+    }
 
 
     public void setCollegeName(String collegeName) {

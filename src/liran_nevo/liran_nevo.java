@@ -3,6 +3,7 @@ package liran_nevo;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static liran_nevo.Lecturer.eDegreeType.*;
 import static liran_nevo.eStatus.*;
 
 public class liran_nevo {
@@ -51,7 +52,7 @@ public class liran_nevo {
                         case 2 -> getCommitteeDetails(college);
                         case 3 -> getLecturerCommitteeDetails(college);
                         case 4 -> getHeadDetails(college);
-                        case 5 -> getLecturerCommitteeDetails(college, "remove");
+                        case 5 -> removeLecturerFromCommitte(college);
                         case 6 -> getDepartmentDetails(college);
                         case 7 -> getLecturerDepDetails(college);
                         case 8 -> showAverageSalaryAllLecturers(college);
@@ -61,7 +62,6 @@ public class liran_nevo {
                         case 12 -> comparisonDocProfByArticles(college);
                         case 13 -> comparisonComsByCriteria(college);// 2 קריטריונים
                         case 14 -> duplicateCommitte(college);
-                        case 15 -> removeLecturerFromCommitte(college);
 
                         default ->
                                 System.out.println("invalid option, enter a number 0 - " + ((MENU.length) - 1) + " please");
@@ -75,19 +75,25 @@ public class liran_nevo {
 
     private static void removeLecturerFromCommitte(College college) throws CollegeExceptions {
         s.nextLine();
-        if (college.getNumOfCommittees() == 0){
-            throw new CommitteeException(NO_COMMITTES_REMOVE.toString());
-        }
         System.out.println("what committee?");
         String committeName = s.nextLine();
-        Committee c = Util.getCommitteeFromName(committeName,college.getCommittees());
-        if (c == null){
-            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
-        }
         System.out.println("what lecturer?");
-        Util.printArraysByName(c.getLecturers());
         String lectName = s.nextLine();
-        c.removeLecturerByName(lectName);
+        college.removeLecturerFromCommittee(lectName,committeName);
+//        s.nextLine();
+//        if (college.getNumOfCommittees() == 0){
+//            throw new CommitteeException(NO_COMMITTES_REMOVE.toString());
+//        }
+//        System.out.println("what committee?");
+//        String committeName = s.nextLine();
+//        Committee c = Util.getCommitteeFromName(committeName,college.getCommittees());
+//        if (c == null){
+//            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
+//        }
+//        System.out.println("what lecturer?");
+//        Util.printArraysByName(c.getLecturers());
+//        String lectName = s.nextLine();
+//        c.removeLecturerByName(lectName);
     }
 
     private static void duplicateCommitte(College college) throws CollegeExceptions, CloneNotSupportedException {
@@ -109,61 +115,67 @@ public class liran_nevo {
         System.out.println("Enter which criteria you want to compare (enter number): ");
         System.out.println("1 - Compare by number of lecturers");
         System.out.println("2 - Compare by number of articles");
-
-        while (true){
-            try {
-                int choice = s.nextInt();
-                switch (choice){
-                    case 1 -> {
-                        int res = college.CompareComByNumOfLect(c1,c2);
-                        switch (res){
-                            case -1 -> System.out.println(c2 + " has more lecturers");
-                            case 0 -> System.out.println(c2 + " and "+c1 +" has equal number of lecturers");
-                            case 1 -> System.out.println(c1 + " has more lecturers");
-                        }
-                        return;
-                    }
-                    case 2 -> {
-                        int res = college.CompareComByNumOfArt(c1,c2);
-                        switch (res){
-                            case -1 -> System.out.println(c2 + " has more articles");
-                            case 0 -> System.out.println(c2 + " and "+c1 +" has equal number of articles");
-                            case 1 -> System.out.println(c1 + " has more articles");
-                        }
-                        return;
-                    }
-
-                }
-            }catch (InputMismatchException e){
-                s.nextLine();
-                throw new CollegeExceptions("wrong input. Try again..");
-            }
+        int choice = s.nextInt();
+        int res = college.CompareCom(c1,c2,choice);
+        switch (res){
+            case -1 -> System.out.println(c2 + " has more " +( choice == 1? "lecturers":"articles"));
+            case 0 -> System.out.println(c2 + " and "+c1 +" has equal number of "+( choice == 1? "lecturers":"articles"));
+            case 1 -> System.out.println(c1 + " has more"+ ( choice == 1? "lecturers":"articles"));
         }
+//        while (true){
+//            try {
+//                int choice = s.nextInt();
+//                switch (choice){
+//                    case 1 -> {
+//                        int res = college.CompareCom(c1,c2);
+//                        switch (res){
+//                            case -1 -> System.out.println(c2 + " has more lecturers");
+//                            case 0 -> System.out.println(c2 + " and "+c1 +" has equal number of lecturers");
+//                            case 1 -> System.out.println(c1 + " has more lecturers");
+//                        }
+//                        return;
+//                    }
+//                    case 2 -> {
+//                        int res = college.CompareComByNumOfArt(c1,c2);
+//                        switch (res){
+//                            case -1 -> System.out.println(c2 + " has more articles");
+//                            case 0 -> System.out.println(c2 + " and "+c1 +" has equal number of articles");
+//                            case 1 -> System.out.println(c1 + " has more articles");
+//                        }
+//                        return;
+//                    }
+//
+//                }
+//            }catch (InputMismatchException e){
+//                s.nextLine();
+//                throw new CollegeExceptions("wrong input. Try again..");
+//            }
+//        }
     }
 
     private static void comparisonDocProfByArticles(College college)throws CollegeExceptions {
         s.nextLine();
+        Util.printDocProf(college.getLecturers(),college.getNumOfLecturers());
         System.out.println("enter name of first doc/prof: ");
-        Util.printDocProf(college.getLecturers(),college.getNumOfLecturers());
         String firstName = s.nextLine();
-        Lecturer one = Util.getLecturerFromName(firstName,college.getLecturers());
-        if (one == null){
-            throw new LecturerException(LECTURER_DONT_EXIST.toString());
-        }
-        if (!(one instanceof Doctor)){
-            throw new LecturerException(NOT_DOC.toString());
-        }
         System.out.println("enter name of second doc/prof: ");
-        Util.printDocProf(college.getLecturers(),college.getNumOfLecturers());
         String secName = s.nextLine();
-        Lecturer two = Util.getLecturerFromName(secName,college.getLecturers());
-        if (two == null){
-            throw new LecturerException(LECTURER_DONT_EXIST.toString());
-        }
-        if (!(two instanceof Doctor)){
-            throw new LecturerException(NOT_DOC.toString());
-        }
-        switch (((Doctor) one).compareTo((Doctor)two)){
+        int res = college.compareDocProf(firstName,secName);
+//        if (one == null){
+//            throw new LecturerException(LECTURER_DONT_EXIST.toString());
+//        }
+//        if (!(one instanceof Doctor)){
+//            throw new LecturerException(NOT_DOC.toString());
+//        }
+//
+//        Lecturer two = Util.getLecturerFromName(secName,college.getLecturers());
+//        if (two == null){
+//            throw new LecturerException(LECTURER_DONT_EXIST.toString());
+//        }
+//        if (!(two instanceof Doctor)){
+//            throw new LecturerException(NOT_DOC.toString());
+//        }
+        switch (res){
             case -1 -> System.out.println(secName + " has more articles");
             case 0 -> System.out.println(firstName + " and " + secName + " has equal number of articles");
             case 1 -> System.out.println(firstName + " has more articles");
@@ -183,16 +195,12 @@ public class liran_nevo {
         }
     }
     // i/o method to get details for action
-    private static void getDepartmentDetails(College college, String show) { //dep salaries
+    private static void getDepartmentDetails(College college, String show) throws CollegeExceptions { //dep salaries
         s.nextLine();
         System.out.println("enter department name: ");
         Util.printArraysByName(college.getDepartments());
         String name = s.nextLine();
-        try {
-            college.showAverageSalaryByDep(name);
-        }catch(CollegeExceptions e){
-            System.out.println(e.getMessage());
-        }
+        college.showAverageSalaryByDep(name);
     }
     // output method
     private static void showAverageSalaryAllLecturers(College college) {
@@ -200,7 +208,7 @@ public class liran_nevo {
        System.out.println(average);
     }
     // i/o method to get details for action
-    private static void getLecturerDepDetails(College college) {
+    private static void getLecturerDepDetails(College college) throws CollegeExceptions {
         s.nextLine();
         System.out.println("What department? ");
         Util.printArraysByName(college.getDepartments());
@@ -208,27 +216,19 @@ public class liran_nevo {
         System.out.println("What lecturer? (enter name) ");
         Util.printArraysByName(college.getLecturers());
         String lecturerName = s.nextLine();
-        try {
-            college.addLecturerToDep(depName, lecturerName);
-        }catch (CollegeExceptions e){
-            System.out.println(e.getMessage());
-        }
+        college.addLecturerToDep(depName, lecturerName);
     }
     // i/o method to get details for action
-    private static void getDepartmentDetails(College college) {
+    private static void getDepartmentDetails(College college) throws CollegeExceptions {
         s.nextLine();
         System.out.println("enter department name- ");
         String name = s.nextLine();
         System.out.println("enter number of students ");
         int num = s.nextInt();
-        try {
-            college.addStudyDepartment(name, num);
-        }catch(CollegeExceptions e){
-            System.out.println(e.getMessage());
-        }
+        college.addStudyDepartment(name, num);
     }
     // i/o method to get details for action
-    private static void getHeadDetails(College college) {
+    private static void getHeadDetails(College college) throws CollegeExceptions {
         s.nextLine();
         System.out.println("What Committee: ");
         Util.printArraysByName(college.getCommittees());
@@ -236,22 +236,10 @@ public class liran_nevo {
         System.out.println("enter new head of committee: ");
         Util.printArraysByName(college.getLecturers());
         String newHead = s.nextLine();
-        try {
-            college.updateHeadOfCommittee(committeeName, newHead);
-        }catch (CollegeExceptions e){
-            System.out.println(e.getMessage());
-        }
-
+        college.updateHeadOfCommittee(committeeName, newHead);
     }
     // i/o method to get details for action
-    private static void getLecturerCommitteeDetails(College college, String remove) {
-        if (college.getCommittees().length == 0){
-            System.out.println(new CommitteeException(NO_COMMITTES_REMOVE.toString()).getMessage());
-            return;
-        }
-        if (college.getLecturers().length==0){
-            System.out.println(new LecturerException(NO_LECTURERS_REMOVE.toString()).getMessage());
-        }
+    private static void getLecturerCommitteeDetails(College college) throws CollegeExceptions {
         s.nextLine();
         String lecturerName, committeeName;
         System.out.println("enter lecturer name: ");
@@ -260,38 +248,10 @@ public class liran_nevo {
         System.out.println("enter committee name: ");
         Util.printArraysByName(college.getCommittees());
         committeeName = s.nextLine();
-        try {
-            college.removeLecturerFromCommittee(lecturerName, committeeName);
-        }catch(CollegeExceptions e){
-            System.out.println(e.getMessage());
-        }
+        college.addLecturerToCommittee(Util.getLecturerFromName(lecturerName, college.getLecturers()), Util.getCommitteeFromName(committeeName, college.getCommittees()));
     }
     // i/o method to get details for action
-    private static void getLecturerCommitteeDetails(College college) {
-        if (college.getLecturers().length==0){
-            System.out.println(new LecturerException(NO_LECTURERS_ADD.toString()).getMessage());
-            return;
-        }
-        if (college.getCommittees().length==0){
-            System.out.println(new CommitteeException(NO_COMMITTES_ADD.toString()).getMessage());
-            return;
-        }
-        s.nextLine();
-        String lecturerName, committeeName;
-        System.out.println("enter lecturer name: ");
-        Util.printArraysByName(college.getLecturers());
-        lecturerName = s.nextLine();
-        System.out.println("enter committee name: ");
-        Util.printArraysByName(college.getCommittees());
-        committeeName = s.nextLine();
-        try {
-            college.addLecturerToCommittee(Util.getLecturerFromName(lecturerName, college.getLecturers()), Util.getCommitteeFromName(committeeName, college.getCommittees()));
-        }catch (CollegeExceptions e){
-            System.out.println(e.getMessage());
-        }
-    }
-    // i/o method to get details for action
-    private static void getCommitteeDetails(College college) throws LecturerException {
+    private static void getCommitteeDetails(College college) throws CollegeExceptions {
         s.nextLine();
         System.out.println("enter committee name: ");
         String name = s.nextLine();
@@ -302,17 +262,10 @@ public class liran_nevo {
             }
         }
         String headName = s.nextLine();
-        if (!Util.isExist(headName,college.getLecturers(),college.getNumOfLecturers())){
-            throw new LecturerException(LECTURER_DONT_EXIST.toString());
-        }
-        try {
-            college.addCommittee(name, Util.getLecturerFromName(headName, college.getLecturers()));
-        }catch (CollegeExceptions e){
-            System.out.println(e.getMessage());
-        }
+        college.addCommittee(name, headName);
     }
     // i/o method to get details for action
-    private static void getLecturerDetails(College college) throws InputMismatchException {
+    private static void getLecturerDetails(College college) throws InputMismatchException, CollegeExceptions {
         s.nextLine();
         System.out.println("enter name: ");
         String name = s.nextLine();
@@ -320,59 +273,25 @@ public class liran_nevo {
         String id = s.nextLine();
         System.out.println("enter degree: \n1- BSc\n2- MSc\n3- doctor\n4- professor");
         int degree = s.nextInt();
-        Lecturer.eDegreeType deg;
-        switch (degree) {
-            case 1 -> deg = Lecturer.eDegreeType.BSc;
-            case 2 -> deg = Lecturer.eDegreeType.MSc;
-            case 3 -> deg = Lecturer.eDegreeType.DOCTOR;
-            case 4 -> deg = Lecturer.eDegreeType.PROFESSOR;
-            default -> deg = Lecturer.eDegreeType.BSc; //default for invalid is first degree
-        }
         s.nextLine();
         System.out.println("enter degree name: ");
         String degName = s.nextLine();
-        int salary = 0;
-        boolean go = false;
-        while (!go) {
-            try {
-                System.out.println("enter salary: ");
-                salary = s.nextInt();
-                if (salary != 0) {
-                    go = true;
-                }
-            }catch (InputMismatchException e){
-                s.nextLine();
-                System.out.println("enter an integer");
+        System.out.println("enter salary: ");
+        int salary = s.nextInt();
+        switch (degree){
+            case 1 -> college.addLecturer(name, id, BSc, degName, salary);
+            case 2 -> college.addLecturer(name, id, MSc, degName, salary);
+            case 3 -> {
+                String[] articles = getArticles();
+                college.addLecturer(name, id, DOCTOR, degName, salary, articles);
+            }
+            case 4->{
+                String[] articles = getArticles();
+                System.out.println("enter name of institution that awarded the professorship");
+                String inst = s.nextLine();
+                college.addLecturer(name, id, PROFESSOR, degName, salary, articles, inst);
             }
         }
-        try {
-            switch (degree) {
-                case 1, 2 -> college.addLecturer(name, id, deg, degName, salary);
-                case 3 -> {
-                    String[] articles = getArticles();
-                    college.addLecturer(name, id, deg, degName, salary, articles);
-                }
-                case 4 -> {
-                    String[] articles = getArticles();
-                    System.out.println("enter name of institution that awarded the professorship");
-                    String inst = s.nextLine();
-                    college.addLecturer(name, id, deg, degName, salary, articles, inst);
-                }
-            }
-        }catch (CollegeExceptions e){
-            System.out.println(e.getMessage());
-        }
-//        if (degree == 4){ // if professor - get the name of body
-//            System.out.println("enter name of institution that awarded the professorship");
-//            String inst = s.nextLine();
-//            eStatus stat = college.addLecturer(name,id,deg,degName,salary,inst);
-//        }else {
-//            eStatus stat = college.addLecturer(name, id, deg, degName, salary);
-//        }
-//        switch (stat){
-//            case SUCCESS -> System.out.println(eStatus.SUCCESS);
-//            case LECTURER_EXISTS -> System.out.println(eStatus.LECTURER_EXISTS + ", Try again ");
-//        }
     }
 
     private static String[] getArticles() {

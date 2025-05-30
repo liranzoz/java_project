@@ -28,10 +28,10 @@ public class Committee implements Cloneable {
     }
 
     public void removeLecturerByName(String name) throws LecturerException {
-        if (!Util.isExist(name, lecturers, numOfLecturers)) {
+        if (!Util.isExist(name, lecturers, numOfLecturers)) { // lecturer dont exist - throw exeption
             throw new LecturerException(LECTURER_DONT_EXIST.toString());
         }
-        if (Util.getLecturerFromName(name, lecturers).equals(this.head)) {
+        if (Util.getLecturerFromName(name, lecturers).equals(this.head)) { // lecturer is the head of com - cant remove, throw exeption
             throw new LecturerException(LECT_IS_HEAD.toString());
         }
         for (int i = 0; i < numOfLecturers; i++) {
@@ -47,7 +47,7 @@ public class Committee implements Cloneable {
     }
 
     public int getNumOfArticles() {
-        int numA = 0;
+        int numA = ((Doctor) head).getNumOfArticles();
         for (int i = 0; i < numOfLecturers; i++) {
             if (lecturers[i] instanceof Doctor) {
                 numA += ((Doctor) lecturers[i]).getNumOfArticles();
