@@ -1,6 +1,7 @@
 package liran_nevo;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import static liran_nevo.eStatus.*;
@@ -98,7 +99,12 @@ public class College {
         committee.addLecturerToCommittee(lecturer);
         lecturer.addCommittee(committee);
     }
-
+    private void addCommittee(Committee clone) {
+        if (numOfCommittees == committees.length) {
+            committees = (Committee[]) Util.copyArr(committees, numOfCommittees == 0 ? 1 : numOfCommittees * 2);
+        }
+        committees[numOfCommittees++] = clone;
+    }
     public void addCommittee(String name, Lecturer head)throws CollegeExceptions {
         if(!Util.isDocProf(head)){
             throw new LecturerException(HEAD_NOT_VALID.toString());
@@ -203,12 +209,38 @@ public class College {
         return sb.toString();
     }
 
-    public void DuplicateComittee(String comiteeName) throws CollegeExceptions{
+    public void DuplicateComittee(String comiteeName) throws CollegeExceptions, CloneNotSupportedException {
+        if (numOfCommittees == 0){
+            throw new CommitteeException(NO_COMMITTES.toString());
+        }
         if (Util.getCommitteeFromName(comiteeName,committees) == null){
             throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
         }
-        this.addCommittee(comiteeName+" - new",Util.getCommitteeFromName(comiteeName,committees).getHead());
+        Committee newCom = Util.getCommitteeFromName(comiteeName,committees);
+        this.addCommittee(newCom.clone());
     }
+
+
+
+    public int CompareComByNumOfLect(String c1, String c2) throws CommitteeException {
+        Committee com1 = Util.getCommitteeFromName(c1,committees);
+        Committee com2 = Util.getCommitteeFromName(c2,committees);
+        if (com1 == null || com2 == null){
+            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
+        }
+        return new CompareDepByNumOfLect().compare(com1,com2);
+    }
+
+    public int CompareComByNumOfArt(String c1, String c2) throws CommitteeException {
+        Committee com1 = Util.getCommitteeFromName(c1,committees);
+        Committee com2 = Util.getCommitteeFromName(c2,committees);
+        if (com1 == null || com2 == null){
+            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
+        }
+        return new CompareDepByNumOfArt().compare(com1,com2);
+    }
+
+
 
     public void setCollegeName(String collegeName) {
         this.collegeName = collegeName;

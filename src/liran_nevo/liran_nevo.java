@@ -21,7 +21,7 @@ public class liran_nevo {
             "show all lecturers data",//10
             "show all committees data",//11
             "compare Doctor/ professor by number of articles",//12
-            "compare department",//13
+            "compare committees",//13
             "duplicate committee",//14 - 2קריטריונים
             "remove lecturer from committee"//15
     };
@@ -59,14 +59,14 @@ public class liran_nevo {
                         case 10 -> showAllLecturers(college);
                         case 11 -> showAllCommittee(college);
                         case 12 -> comparisonDocProfByArticles(college);
-                        case 13 -> comparisonDepsByCriteria(college);// 2 קריטריונים
+                        case 13 -> comparisonComsByCriteria(college);// 2 קריטריונים
                         case 14 -> duplicateCommitte(college);
                         case 15 -> removeLecturerFromCommitte(college);
 
                         default ->
                                 System.out.println("invalid option, enter a number 0 - " + ((MENU.length) - 1) + " please");
                     }
-                }catch(CollegeExceptions e){
+                }catch(CollegeExceptions | CloneNotSupportedException e){
                     System.out.println(e.getMessage());
                 }
             } while (userChoice != 0);
@@ -90,18 +90,22 @@ public class liran_nevo {
         c.removeLecturerByName(lectName);
     }
 
-    private static void duplicateCommitte(College college)throws CollegeExceptions {
-        if (college.getNumOfCommittees() == 0){
-            throw new CommitteeException(NO_COMMITTES.toString());
-        }
+    private static void duplicateCommitte(College college) throws CollegeExceptions, CloneNotSupportedException {
         s.nextLine();
         System.out.println("what committee?");
         Util.printArraysByName(college.getCommittees());
         String comiteeName = s.nextLine();
         college.DuplicateComittee(comiteeName);
+
     }
 
-    private static void comparisonDepsByCriteria(College college)throws CollegeExceptions {
+    private static void comparisonComsByCriteria(College college) throws CollegeExceptions {
+        s.nextLine();
+        System.out.println("Enter name of the first Committee");
+        String c1 = s.nextLine();
+        System.out.println("Enter name of the second Committee");
+        String c2 = s.nextLine();
+
         System.out.println("Enter which criteria you want to compare (enter number): ");
         System.out.println("1 - Compare by number of lecturers");
         System.out.println("2 - Compare by number of articles");
@@ -110,14 +114,29 @@ public class liran_nevo {
             try {
                 int choice = s.nextInt();
                 switch (choice){
-                    case 1 -> college.compareByNumOfLec();
-                    case 2 -> college.compareByNumOfArt();
+                    case 1 -> {
+                        int res = college.CompareComByNumOfLect(c1,c2);
+                        switch (res){
+                            case -1 -> System.out.println(c2 + " has more lecturers");
+                            case 0 -> System.out.println(c2 + " and "+c1 +" has equal number of lecturers");
+                            case 1 -> System.out.println(c1 + " has more lecturers");
+                        }
+                        return;
+                    }
+                    case 2 -> {
+                        int res = college.CompareComByNumOfArt(c1,c2);
+                        switch (res){
+                            case -1 -> System.out.println(c2 + " has more articles");
+                            case 0 -> System.out.println(c2 + " and "+c1 +" has equal number of articles");
+                            case 1 -> System.out.println(c1 + " has more articles");
+                        }
+                        return;
+                    }
 
                 }
             }catch (InputMismatchException e){
                 s.nextLine();
                 throw new CollegeExceptions("wrong input. Try again..");
-//                System.out.println("Error: wrong input. Try again..");
             }
         }
     }
@@ -137,15 +156,18 @@ public class liran_nevo {
         System.out.println("enter name of second doc/prof: ");
         Util.printDocProf(college.getLecturers(),college.getNumOfLecturers());
         String secName = s.nextLine();
-        Lecturer two = Util.getLecturerFromName(firstName,college.getLecturers());
+        Lecturer two = Util.getLecturerFromName(secName,college.getLecturers());
         if (two == null){
             throw new LecturerException(LECTURER_DONT_EXIST.toString());
         }
         if (!(two instanceof Doctor)){
             throw new LecturerException(NOT_DOC.toString());
         }
-        System.out.println(((Doctor) one).compareTo((Doctor)two));
-
+        switch (((Doctor) one).compareTo((Doctor)two)){
+            case -1 -> System.out.println(secName + " has more articles");
+            case 0 -> System.out.println(firstName + " and " + secName + " has equal number of articles");
+            case 1 -> System.out.println(firstName + " has more articles");
+        }
     }
 
     //output method

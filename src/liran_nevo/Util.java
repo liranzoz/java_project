@@ -107,6 +107,7 @@ public class Util {
                 i++;
             }
         }
+
     }
 
     public static void printDocProf(Lecturer[] lecturers,int numOfLecturers){

@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import static liran_nevo.eStatus.*;
 
-public class Lecturer {
+public class Lecturer implements Cloneable{
 
     public void removeCommitte(Committee c) throws CommitteeException {
         if(!Util.isExist(c.getName(),committees,numOfCommittees)){
@@ -18,6 +18,11 @@ public class Lecturer {
             }
         }
         committees[--numOfCommittees]=null;
+    }
+
+    @Override
+    protected Lecturer clone() throws CloneNotSupportedException {
+        return (Lecturer) super.clone();
     }
 
     public enum eDegreeType {BSc, MSc, DOCTOR, PROFESSOR}
