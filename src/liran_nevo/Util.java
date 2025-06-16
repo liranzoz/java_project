@@ -1,9 +1,10 @@
 package liran_nevo;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
 public class Util {
-    public static int getNumOfDocProf(Lecturer[] lecturers) {
+    public static int getNumOfDocProf(ArrayList<Lecturer> lecturers) {
         int counter = 0;
         for (Lecturer l : lecturers) {
             if (l != null && l instanceof Doctor){
@@ -21,32 +22,32 @@ public class Util {
         return (fillChar + "").repeat(minWidth - st.length()) + st;
     }
 
-    public static boolean isExist(String name, Lecturer[] arr, int numOf) {
-        for (int i = 0; i < numOf; i++) {
-            if (arr[i].getName().equals(name)) {
+    public static boolean isExist(String name, ArrayList<? extends Collegable> arr) {
+        for (int i = 0; i < arr.size(); i++) {
+            if (arr.get(i).getName().equals(name)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isExist(String name, Department[] arr, int numOf) {
-        for (int i = 0; i < numOf; i++) {
-            if (arr[i].getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static boolean isExist(String name, Committee[] arr, int numOf) {
-        for (int i = 0; i < numOf; i++) {
-            if (arr[i].getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public static boolean isExist(String name, ArrayList<Department> arr) {
+//        for (int i = 0; i < arr.size(); i++) {
+//            if (arr.get(i).getName().equals(name)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public static boolean isExist(String name, ArrayList<Committee> arr, int numOf) {
+//        for (int i = 0; i < numOf; i++) {
+//            if (arr.get(i).getName().equals(name)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public static boolean isDocProf(Lecturer lecturer) {
         if (lecturer == null){
@@ -55,18 +56,18 @@ public class Util {
         return lecturer.getDegree().equals(Lecturer.eDegreeType.DOCTOR) || lecturer.getDegree().equals(Lecturer.eDegreeType.PROFESSOR);
     }
 
-    public static Committee getCommitteeFromName(String name, Committee[] committees) {
-        for (Committee committee : committees) {
-            if (committee.getName().equals(name)) {
-                return committee;
+    public static Committee getCommitteeFromName(String name, ArrayList<Committee> arr) {
+        for (Committee c : arr) {
+            if (c.getName().equals(name)) {
+                return c;
             }
         }
         return null;
     }
 
 
-    public static Lecturer getLecturerFromName(String name, Lecturer[] lecturers) {
-        for (Lecturer lecturer : lecturers) {
+    public static Lecturer getLecturerFromName(String name, ArrayList<Lecturer> arr) {
+        for (Lecturer lecturer :arr) {
             if (lecturer.getName().equals(name)) {
                 return lecturer;
             }
@@ -74,8 +75,8 @@ public class Util {
         return null;
     }
 
-    public static Department getDepartmentFromName(String name, Department[] departments) {
-        for (Department department : departments) {
+    public static Department getDepartmentFromName(String name, ArrayList<Department> arr) {
+        for (Department department : arr) {
             if (department.getName().equals(name)) {
                 return department;
             }
@@ -83,66 +84,52 @@ public class Util {
         return null;
     }
 
-    public static Object[] copyArr(Object[] arr, int size) {
-        return Arrays.copyOf(arr, size);
-    }
+//    public static Object[] copyArr(ArrayList<Object> arr, int size) {
+//        return Arrays.copyOf(arr, size);
+//    }
 
-    public static void printArraysByName(Lecturer[] arr) {
-        System.out.println("existing lecturers (enter name):");
+    public static void printArraysByName(ArrayList<? extends Collegable> arr) {
+        System.out.println("existing (enter name):");
         int i = 1;
-        for (Lecturer name : arr) {
+        for (Collegable name : arr) {
             if (name != null) {
                 System.out.println(i + ") " + name.getName());
                 i++;
             }
         }
     }
+//
+//    public static void printArraysByName(ArrayList<Department> arr) {
+//        System.out.println("existing departments (enter name):");
+//        int i = 1;
+//        for (Department name : arr) {
+//            if (name != null) {
+//                System.out.println(i + ") " + name.getName());
+//                i++;
+//            }
+//        }
+//
+//    }
 
-    public static void printArraysByName(Department[] arr) {
-        System.out.println("existing departments (enter name):");
-        int i = 1;
-        for (Department name : arr) {
-            if (name != null) {
-                System.out.println(i + ") " + name.getName());
-                i++;
-            }
-        }
-
-    }
-
-    public static void printDocProf(Lecturer[] lecturers,int numOfLecturers){
-        for (int i = 0; i < numOfLecturers; i++) {
-            if (lecturers[i] instanceof Doctor){
-                System.out.println(i + ") " + lecturers[i].getName());
-            }
-        }
-    }
-
-    public static void printArraysByName(Committee[] arr) {
-        System.out.println("existing committees (enter name):");
-        int i = 1;
-        for (Committee name : arr) {
-            if (name != null) {
-                System.out.println(i + ") " + name.getName());
-                i++;
+    public static void printDocProf(ArrayList<Lecturer> arr){
+        for (int i = 0; i < arr.size(); i++) {
+            if (arr.get(i) instanceof Doctor){
+                System.out.println(i + ") " + arr.get(i).getName());
             }
         }
     }
 
-
-
-
-    public static double getAverage(Lecturer[] lecturers, int numOfLectures) {
+    public static double getAverage(ArrayList<Lecturer> arr) {
         double averageSum = 0;
-        if (lecturers.length == 0) {
+        if (arr.size() == 0) {
             return 0;
         }
-        for (Lecturer lecturer : lecturers) {
+        for (Lecturer lecturer : arr) {
             if (lecturer != null) {
                 averageSum += lecturer.getSalary();
             }
         }
-        return averageSum / numOfLectures;
+        return averageSum / arr.size();
     }
 
 
@@ -159,19 +146,6 @@ public class Util {
         return averageSum / dep.getNumOfLecturers();
     }
 
-// FOR FUTURE USE
-//    public static String str(String[] arr) {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("[");
-//        for (int i = 0; i < arr.length; i++) {
-//            sb.append(arr[i]);
-//            if (i < arr.length - 1) {
-//                sb.append(", ");
-//            }
-//        }
-//        sb.append("]");
-//        return sb.toString();
-//    }
 }
 
 

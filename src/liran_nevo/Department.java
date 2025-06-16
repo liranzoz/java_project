@@ -1,11 +1,14 @@
 package liran_nevo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Department {
+import static liran_nevo.eStatus.*;
+
+public class Department implements Collegable{
     private String name;
     private int numOfStudents;
-    private Lecturer[] lecturers = new Lecturer[0];
+    private ArrayList<Lecturer> lecturers;
     private int numOfLecturers;
 
     public Department(String name, int numOfStudents) {
@@ -14,34 +17,35 @@ public class Department {
     }
 
     public void removeLecturerFromDep(Lecturer lecturer) {
-        int pos = 0;
-        for (int i = 0; i < lecturers.length; i++) {
-            if (lecturers[i].equals(lecturer)) {
-                pos = i;
-                break;
-            }
-            for (int j = pos; j < lecturers.length; j++) {
-                if (lecturers[j + 1] == null || j + 1 > lecturers.length) {
-                    break;
-                }
-                lecturers[j] = lecturers[j + 1];
-            }
-        }
+//        int pos = 0;
+//        for (int i = 0; i < lecturers.size(); i++) {
+//            if (lecturers.get(i).equals(lecturer)) {
+//                pos = i;
+//                break;
+//            }
+//            for (int j = pos; j < lecturers.size(); j++) {
+//                if (lecturers.get(j + 1) == null || j + 1 > lecturers.size()) {
+//                    break;
+//                }
+//                lecturers.set(j, lecturers.get(j + 1));
+//            }
+//        }
+        lecturers.remove(lecturer);
     }
 
-    public void addLecturerToDep(Lecturer lecturer) {
-        if (numOfLecturers == lecturers.length) {
-            this.lecturers = Arrays.copyOf(lecturers, lecturers.length == 0 ? 1 : lecturers.length * 2);
+    public void addLecturerToDep(Lecturer lecturer) throws LecturerException {
+        if (Util.isExist(lecturer.getName(),lecturers)){
+            throw new LecturerException(LECTURER_EXIST.toString());
         }
-        lecturers[numOfLecturers++] = lecturer;
+        lecturers.add(lecturer);
         lecturer.setDepartment(this);
     }
 
     public int getNumOfArticles(){
         int numA = 0;
         for (int i = 0; i <numOfLecturers ; i++) {
-            if (lecturers[i] instanceof Doctor){
-                numA += ((Doctor) lecturers[i]).getNumOfArticles();
+            if (lecturers.get(i) instanceof Doctor){
+                numA += ((Doctor) lecturers.get(i)).getArticles().size();
             }
         }
         return numA;
@@ -63,11 +67,11 @@ public class Department {
         this.numOfStudents = numOfStudents;
     }
 
-    public Lecturer[] getLecturers() {
+    public ArrayList<Lecturer> getLecturers() {
         return lecturers;
     }
 
-    public void setLecturers(Lecturer[] lecturers) {
+    public void setLecturers(ArrayList<Lecturer> lecturers) {
         this.lecturers = lecturers;
     }
 
@@ -89,9 +93,9 @@ public class Department {
         }
             for (int i = 0; i < numOfLecturers; i++) {
                 if (i + 1 == numOfLecturers) {
-                    sb.append(lecturers[i].getName()).append(", ");
+                    sb.append(lecturers.get(i).getName()).append(", ");
                 } else {
-                    sb.append(lecturers[i].getName());
+                    sb.append(lecturers.get(i).getName());
                 }
             }
         sb.append("\n");

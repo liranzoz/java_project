@@ -1,30 +1,11 @@
 package liran_nevo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static liran_nevo.eStatus.*;
 
-public class Lecturer implements Cloneable{
-
-    public void removeCommitte(Committee c) throws CommitteeException {
-        if(!Util.isExist(c.getName(),committees,numOfCommittees)){
-            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
-        }
-        for (int i = 0; i < numOfCommittees; i++) {
-            if (committees[i].equals(c)){
-                for (int j = i; j < numOfCommittees -1; j++) {
-                    committees[i] = committees[i+1];
-                }
-            }
-        }
-        committees[--numOfCommittees]=null;
-    }
-
-    @Override
-    protected Lecturer clone() throws CloneNotSupportedException {
-        return (Lecturer) super.clone();
-    }
-
+public class Lecturer implements Cloneable, Collegable{
     public enum eDegreeType {BSc, MSc, DOCTOR, PROFESSOR}
 
     private String name;
@@ -33,8 +14,28 @@ public class Lecturer implements Cloneable{
     private String id;
     private int salary;
     private Department department;
-    private Committee[] committees;
-    private int numOfCommittees;
+    private ArrayList<Committee> committees;
+
+    public void removeCommitte(Committee c) throws CommitteeException {
+        if(!Util.isExist(c.getName(),committees)){
+            throw new CommitteeException(COMMITTEE_DONT_EXIST.toString());
+        }
+        for (int i = 0; i < committees.size(); i++) {
+            if (committees.get(i).equals(c)){
+                for (int j = i; j < committees.size() -1; j++) {
+                    committees.set(i, committees.get(i+1));
+                }
+            }
+        }
+        committees.set(committees.size() - 1, null);
+    }
+
+    @Override
+    protected Lecturer clone() throws CloneNotSupportedException {
+        return (Lecturer) super.clone();
+    }
+
+
 
     public Lecturer(String name, String id, eDegreeType degree, String degName, int salary) {
         setName(name);
@@ -42,15 +43,11 @@ public class Lecturer implements Cloneable{
         setDegree(degree);
         setDegreeName(degName);
         setSalary(salary);
-        this.committees = new Committee[0];
     }
 
     public void addCommittee(Committee committee) throws CollegeExceptions {
-        if (this.committees.length == this.numOfCommittees) {
-            this.committees = Arrays.copyOf(committees, committees.length == 0 ? 1 : committees.length * 2);
-        }
-        if (!Util.isExist(committee.getName(), committees, numOfCommittees)) {
-            this.committees[numOfCommittees++] = committee;
+        if (!Util.isExist(committee.getName(), committees)) {
+            this.committees.add(committee);
         } else {
             throw new CommitteeException(COMMITTEE_EXIST.toString());
         }
@@ -112,7 +109,7 @@ public class Lecturer implements Cloneable{
     public String toString() {
         System.out.println();
         StringBuilder sb = new StringBuilder("lecturer: "+name+" | id: "+id+" | degree: "+degree+" | degree name: "+degreeName+" | salary:"+salary+"\ncommittees: ") ;
-        if (numOfCommittees == 0){
+        if (committees.size() == 0){
             sb.append("no committees");
         }else {
         for (Committee c : committees) {

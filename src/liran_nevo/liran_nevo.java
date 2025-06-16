@@ -1,5 +1,7 @@
 //    Liran Zozulya & Nevo Glanz
 package liran_nevo;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -155,7 +157,7 @@ public class liran_nevo {
 
     private static void comparisonDocProfByArticles(College college)throws CollegeExceptions {
         s.nextLine();
-        Util.printDocProf(college.getLecturers(),college.getNumOfLecturers());
+        Util.printDocProf(college.getLecturers());
         System.out.println("enter name of first doc/prof: ");
         String firstName = s.nextLine();
         System.out.println("enter name of second doc/prof: ");
@@ -185,13 +187,13 @@ public class liran_nevo {
     //output method
     private static void showAllCommittee(College college) {
         for (int i = 0; i < college.getNumOfCommittees(); i++) {
-            System.out.println(college.getCommittees()[i]);
+            System.out.println(college.getCommittees().get(i));
         }
     }
     //output method
     private static void showAllLecturers(College college) {
         for (int i = 0; i < college.getNumOfLecturers(); i++) {
-            System.out.println(college.getLecturers()[i]);
+            System.out.println(college.getLecturers().get(i));
         }
     }
     // i/o method to get details for action
@@ -204,7 +206,7 @@ public class liran_nevo {
     }
     // output method
     private static void showAverageSalaryAllLecturers(College college) {
-       double average = Util.getAverage(college.getLecturers(), college.getNumOfLecturers());
+       double average = Util.getAverage(college.getLecturers());
        System.out.println(average);
     }
     // i/o method to get details for action
@@ -282,11 +284,11 @@ public class liran_nevo {
             case 1 -> college.addLecturer(name, id, BSc, degName, salary);
             case 2 -> college.addLecturer(name, id, MSc, degName, salary);
             case 3 -> {
-                String[] articles = getArticles();
+                ArrayList<String> articles = getArticles();
                 college.addLecturer(name, id, DOCTOR, degName, salary, articles);
             }
             case 4->{
-                String[] articles = getArticles();
+                ArrayList<String> articles = getArticles();
                 System.out.println("enter name of institution that awarded the professorship");
                 String inst = s.nextLine();
                 college.addLecturer(name, id, PROFESSOR, degName, salary, articles, inst);
@@ -294,10 +296,11 @@ public class liran_nevo {
         }
     }
 
-    private static String[] getArticles() {
+    private static ArrayList<String> getArticles() {
         s.nextLine();
         System.out.println("enter articles written by the Doctor, seperated by spaces");
-        return s.nextLine().split(" ");
+//        return s.nextLine().split(" ");
+        return (ArrayList<String>) Arrays.asList(s.nextLine()," ");
     }
 
     public static void main(String[] args) {

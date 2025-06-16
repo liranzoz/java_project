@@ -1,13 +1,13 @@
 package liran_nevo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static liran_nevo.eStatus.*;
 
-public class Committee implements Cloneable {
+public class Committee implements Cloneable, Collegable {
     private String name;
-    private Lecturer[] lecturers = new Lecturer[0];
-    private int numOfLecturers = 0;
+    private ArrayList<Lecturer> lecturers;
     private Lecturer head;
 
     public Committee(String name, Lecturer head) {
@@ -19,49 +19,48 @@ public class Committee implements Cloneable {
     protected Committee clone() throws CloneNotSupportedException {
         Committee newCom = (Committee) super.clone();
         newCom.setName(name + " - new");
-        newCom.setHead((Lecturer) this.head.clone());
-        newCom.setLecturers(Arrays.copyOf(lecturers, lecturers.length));
-        for (int i = 0; i < numOfLecturers; i++) {
-            newCom.getLecturers()[i] = lecturers[i].clone();
+        newCom.setHead(this.head.clone());
+//        newCom.setLecturers(Arrays.copyOf(lecturers, lecturers.size()));
+        newCom.setLecturers((ArrayList<Lecturer>) lecturers.clone());
+        for (int i = 0; i < lecturers.size(); i++) {
+            newCom.getLecturers().set(i, lecturers.get(i).clone());
         }
         return newCom;
     }
 
-    public void removeLecturerByName(String name) throws LecturerException {
-        if (!Util.isExist(name, lecturers, numOfLecturers)) { // lecturer dont exist - throw exeption
+    public void removeLecturerByName(String name) throws CollegeExceptions {
+        if (!Util.isExist(name, lecturers)) { // lecturer dont exist - throw exeption
             throw new LecturerException(LECTURER_DONT_EXIST.toString());
         }
         if (Util.getLecturerFromName(name, lecturers).equals(this.head)) { // lecturer is the head of com - cant remove, throw exeption
             throw new LecturerException(LECT_IS_HEAD.toString());
         }
-        for (int i = 0; i < numOfLecturers; i++) {
-            if (lecturers[i].getName().equals(name)) {
-                for (int j = i; j < numOfLecturers - 1; j++) {
-                    lecturers[j] = lecturers[j + 1];
-                }
-
-            }
+//        for (int i = 0; i < lecturers.size(); i++) {
+//            if (lecturers.get(i).getName().equals(name)) {
+//                for (int j = i; j < lecturers.size() - 1; j++) {
+//                    lecturers.set(i,lecturers.get(j + 1));
+//                }
+//
+//            }
+//        }
+        if(!lecturers.remove(Util.getLecturerFromName(name,lecturers))){
+            throw new CollegeExceptions(GENERAL_ERROR.toString());
         }
-        lecturers[numOfLecturers - 1] = null;
-        numOfLecturers--;
+
     }
 
     public int getNumOfArticles() {
-        int numA = ((Doctor) head).getNumOfArticles();
-        for (int i = 0; i < numOfLecturers; i++) {
-            if (lecturers[i] instanceof Doctor) {
-                numA += ((Doctor) lecturers[i]).getNumOfArticles();
+        int numA = ((Doctor) head).getArticles().size();
+        for (int i = 0; i < lecturers.size(); i++) {
+            if (lecturers.get(i) instanceof Doctor) {
+                numA += ((Doctor) lecturers.get(i)).getArticles().size();
             }
         }
         return numA;
     }
 
         public int getNumOfLecturers () {
-            return numOfLecturers;
-        }
-
-        public void setNumOfLecturers ( int numOfLecturers){
-            this.numOfLecturers = numOfLecturers;
+            return lecturers.size();
         }
 
 
@@ -73,11 +72,11 @@ public class Committee implements Cloneable {
             this.name = name;
         }
 
-        public Lecturer[] getLecturers () {
+        public ArrayList<Lecturer> getLecturers () {
             return lecturers;
         }
 
-        public void setLecturers (Lecturer[]lecturers){
+        public void setLecturers (ArrayList<Lecturer> lecturers){
             this.lecturers = lecturers;
         }
 
@@ -98,25 +97,22 @@ public class Committee implements Cloneable {
             if (this.head.equals(lecturer)) {
                 throw new LecturerException(LECT_IS_HEAD.toString());
             }
-            if (numOfLecturers == lecturers.length) {
-                lecturers = Arrays.copyOf(lecturers, lecturers.length == 0 ? 1 : lecturers.length * 2);
-            }
-            lecturers[numOfLecturers++] = lecturer;
+            lecturers.add(lecturer);
         }
 
         @Override
         public String toString () {
             System.out.println();
             StringBuilder sb = new StringBuilder("committee: " + name + " | head of committee: " + head.getName() + "\nlecturers: ");
-            if (numOfLecturers == 0) {
+            if (lecturers.size() == 0) {
                 sb.append("no lecturers\n");
                 return sb.toString();
             }
-            for (int i = 0; i < numOfLecturers; i++) {
-                if (i + 1 != numOfLecturers) {
-                    sb.append(lecturers[i].getName()).append(", ");
+            for (int i = 0; i < lecturers.size(); i++) {
+                if (i + 1 != lecturers.size()) {
+                    sb.append(lecturers.get(i).getName()).append(", ");
                 } else {
-                    sb.append(lecturers[i].getName());
+                    sb.append(lecturers.get(i).getName());
                 }
             }
             sb.append("\n");
