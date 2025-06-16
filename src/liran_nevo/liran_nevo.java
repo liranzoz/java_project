@@ -316,4 +316,6 @@ public class liran_nevo {
         s.close();
     }
 }
+
+//todo חלק 1 במטלה + חלק 3, לבדוק על הקלט של articles
 //Pini The King !
