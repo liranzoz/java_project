@@ -298,9 +298,14 @@ public class liran_nevo {
 
     private static ArrayList<String> getArticles() {
         s.nextLine();
-        System.out.println("enter articles written by the Doctor, seperated by spaces");
-//        return s.nextLine().split(" ");
-        return (ArrayList<String>) Arrays.asList(s.nextLine()," ");
+        System.out.println("enter articles written by the Doctor, '0' to end'");
+        ArrayList<String> articles = new ArrayList<String>();
+        String input = s.nextLine();
+        while (input != "0"){
+            articles.add(input);
+            input = s.nextLine();
+        }
+        return articles;
     }
 
     public static void main(String[] args) {
