@@ -338,7 +338,6 @@ public class liran_nevo {
             String name = s.nextLine();
             c = new College(name);
         }
-
         run(c);
         ObjectOutputStream outFile = new ObjectOutputStream(new FileOutputStream(filePath+ "college.dat"));
         outFile.writeObject(c);
@@ -346,6 +345,4 @@ public class liran_nevo {
         s.close();
     }
 }
-
-//todo חלק 1 במטלה + חלק 3
 //Pini The King !
