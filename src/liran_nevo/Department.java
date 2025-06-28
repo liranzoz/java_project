@@ -8,7 +8,7 @@ import static liran_nevo.eStatus.*;
 public class Department implements Collegable{
     private String name;
     private int numOfStudents;
-    private ArrayList<Lecturer> lecturers;
+    private ArrayList<Lecturer> lecturers = new ArrayList<>();
     private int numOfLecturers;
 
     public Department(String name, int numOfStudents) {

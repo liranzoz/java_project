@@ -17,7 +17,8 @@ public enum eStatus {
     GENERAL_ERROR("Something Went Wrong..."),
     NO_COMMITTES("no Committees"),
     LECT_IS_HEAD("this lecturer is the head of this committe"),
-    NOT_DOC("lecturer is not doctor/ professor");
+    NOT_DOC("lecturer is not doctor/ professor"),
+    DEG_NOT_VALID("degree not valid");
 
     private final String description;
 

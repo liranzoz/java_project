@@ -1,5 +1,6 @@
 package liran_nevo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -7,12 +8,12 @@ import java.util.Scanner;
 
 import static liran_nevo.eStatus.*;
 
-public class College {
+public class College implements Serializable {
     private static Scanner s = new Scanner(System.in);
     private String collegeName;
-    private ArrayList<Lecturer> lecturers;
-    private ArrayList<Department> departments;
-    private ArrayList<Committee> committees;
+    private ArrayList<Lecturer> lecturers = new ArrayList<>();
+    private ArrayList<Department> departments = new ArrayList<>();
+    private ArrayList<Committee> committees = new ArrayList<>();
 
 
     public College(String collegeName) {
@@ -103,7 +104,7 @@ public class College {
     private void addCommittee(Committee clone) {
         committees.add(clone);
     }
-    public void addCommittee(String name, String headName)throws CollegeExceptions {
+    public void addCommittee(String name, String headName,Lecturer.eDegreeType deg)throws CollegeExceptions {
         Lecturer head = Util.getLecturerFromName(headName, lecturers);
         if(head == null || !(head instanceof Doctor)){
             throw new LecturerException(HEAD_NOT_VALID.toString());
@@ -111,7 +112,7 @@ public class College {
         if (Util.isExist(name,committees)){
             throw new CommitteeException(COMMITTEE_EXIST.toString());
         }
-        committees.add(new Committee(name, head));
+        committees.add(new Committee(name, head,deg));
     }
 
     // add lecturer

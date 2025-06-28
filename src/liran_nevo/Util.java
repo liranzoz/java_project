@@ -23,6 +23,9 @@ public class Util {
     }
 
     public static boolean isExist(String name, ArrayList<? extends Collegable> arr) {
+        if (arr.isEmpty()){
+            return false;
+        }
         for (int i = 0; i < arr.size(); i++) {
             if (arr.get(i).getName().equals(name)) {
                 return true;

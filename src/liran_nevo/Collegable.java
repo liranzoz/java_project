@@ -1,5 +1,7 @@
 package liran_nevo;
 
-public interface Collegable {
+import java.io.Serializable;
+
+public interface Collegable extends Serializable {
     String getName();
 }

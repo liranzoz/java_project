@@ -14,7 +14,7 @@ public class Lecturer implements Cloneable, Collegable{
     private String id;
     private int salary;
     private Department department;
-    private ArrayList<Committee> committees;
+    private ArrayList<Committee> committees = new ArrayList<>();
 
     public void removeCommitte(Committee c) throws CommitteeException {
         if(!Util.isExist(c.getName(),committees)){

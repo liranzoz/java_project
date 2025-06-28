@@ -1,5 +1,6 @@
 //    Liran Zozulya & Nevo Glanz
 package liran_nevo;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -11,7 +12,7 @@ import static liran_nevo.eStatus.*;
 public class liran_nevo {
     static Scanner s = new Scanner(System.in);
     private static final String[] MENU = {
-            "exit menu",//0
+            "save and exit",//0
             "add lecturer to college",//1
             "add committee to college",//2
             "add lecturer to committee",//3
@@ -25,8 +26,7 @@ public class liran_nevo {
             "show all committees data",//11
             "compare Doctor/ professor by number of articles",//12
             "compare committees",//13
-            "duplicate committee",//14 - 2קריטריונים
-            "remove lecturer from committee"//15
+            "duplicate committee"//14 - 2קריטריונים
     };
     // i/o method run
     public static void run(College college) {
@@ -264,7 +264,16 @@ public class liran_nevo {
             }
         }
         String headName = s.nextLine();
-        college.addCommittee(name, headName);
+        System.out.println("enter degree for committee: \n1- BSc\n2- MSc\n3- doctor\n4- professor");
+        int degType = s.nextInt();
+        Lecturer.eDegreeType deg = BSc;
+        switch (degType){
+            case 1 -> deg = BSc;
+            case 2 -> deg = MSc;
+            case 3 -> deg = DOCTOR;
+            case 4 -> deg = PROFESSOR;
+        }
+        college.addCommittee(name, headName,deg);
     }
     // i/o method to get details for action
     private static void getLecturerDetails(College college) throws InputMismatchException, CollegeExceptions {
@@ -299,23 +308,44 @@ public class liran_nevo {
     private static ArrayList<String> getArticles() {
         s.nextLine();
         System.out.println("enter articles written by the Doctor, '0' to end'");
-        ArrayList<String> articles = new ArrayList<String>();
+        ArrayList<String> articles = new ArrayList<>();
         String input = s.nextLine();
-        while (input != "0"){
+        while (!input.equals("0")){
             articles.add(input);
             input = s.nextLine();
         }
         return articles;
     }
 
-    public static void main(String[] args) {
-        System.out.println("Enter collage name: ");
-        String name = s.nextLine();
-        College c = new College(name);
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        College c;
+        // file path
+        String packagePath = liran_nevo.class.getPackage().getName()
+                        .replace('.', File.separatorChar);
+        String filePath = System.getProperty("user.dir")
+                + File.separator + "src"
+                + File.separator + packagePath
+                + File.separator;
+
+        //try to read file
+
+        try{
+            ObjectInputStream inFile = new ObjectInputStream(new FileInputStream(filePath+"college.dat"));
+            c = (College) inFile.readObject();
+            inFile.close();
+        }catch (FileNotFoundException e){
+            System.out.println("Enter collage name: ");
+            String name = s.nextLine();
+            c = new College(name);
+        }
+
         run(c);
+        ObjectOutputStream outFile = new ObjectOutputStream(new FileOutputStream(filePath+ "college.dat"));
+        outFile.writeObject(c);
+        outFile.close();
         s.close();
     }
 }
 
-//todo חלק 1 במטלה + חלק 3, לבדוק על הקלט של articles
+//todo חלק 1 במטלה + חלק 3
 //Pini The King !

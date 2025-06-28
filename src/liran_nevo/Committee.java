@@ -6,11 +6,13 @@ import java.util.Arrays;
 import static liran_nevo.eStatus.*;
 
 public class Committee implements Cloneable, Collegable {
+    private Lecturer.eDegreeType deg;
     private String name;
-    private ArrayList<Lecturer> lecturers;
+    private ArrayList<Lecturer> lecturers = new ArrayList<>();
     private Lecturer head;
 
-    public Committee(String name, Lecturer head) {
+    public Committee(String name, Lecturer head, Lecturer.eDegreeType deg) {
+        this.deg = deg;
         setName(name);
         setHead(head);
     }
@@ -94,6 +96,9 @@ public class Committee implements Cloneable, Collegable {
         }
 
         public void addLecturerToCommittee (Lecturer lecturer) throws LecturerException {
+            if (!(lecturer.getDegree().equals(deg))){
+                throw new LecturerException(DEG_NOT_VALID.toString());
+            }
             if (this.head.equals(lecturer)) {
                 throw new LecturerException(LECT_IS_HEAD.toString());
             }
